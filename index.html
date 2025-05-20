@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Tianjinsa的博客 - 分享技术文章和个人心得">
-    <meta name="keywords" content="Tianjinsa, 博客, 技术分享, 开发笔记">
+    <meta name="keywords" content="Tianjinsa, 博客, 技术分享, 开发笔记, 编程, 前端, 后端, 全栈">
     <meta name="author" content="Tianjinsa">
     <!-- 网站图标 -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
@@ -12,132 +12,93 @@
     <meta property="og:title" content="Tianjinsa的博客">
     <meta property="og:description" content="技术分享和个人心得">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://tianjinsa.github.io/blog/">
+    <meta property="og:url" content="https://blog.tianjinsa.top//">
     <title>Tianjinsa的博客</title>
     <!-- 引入样式文件 -->
-    <link rel="stylesheet" href="../styles.css">
-    <style>
-        .blog-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: #282828;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-        }
-        
-        .blog-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .blog-header h1 {
-            margin-bottom: 10px;
-        }
-        
-        .blog-header p {
-            color: #b0b0b0;
-            font-size: 1.1em;
-        }
-        
-        .blog-list {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .blog-item {
-            margin-bottom: 30px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #444444;
-        }
-        
-        .blog-item:last-child {
-            border-bottom: none;
-        }
-        
-        .blog-title {
-            font-size: 1.8em;
-            margin-bottom: 10px;
-        }
-        
-        .blog-title a {
-            color: #ffffff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .blog-title a:hover {
-            color: #87ceeb;
-        }
-        
-        .blog-date {
-            font-size: 0.9em;
-            color: #888888;
-            margin-bottom: 15px;
-            display: block;
-        }
-        
-        .blog-excerpt {
-            color: #b0b0b0;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-        
-        .read-more {
-            display: inline-block;
-            color: #87ceeb;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .read-more:hover {
-            color: #ffffff;
-            transform: translateX(5px);
-        }
-        
-        .no-blogs {
-            text-align: center;
-            padding: 50px 0;
-            color: #888888;
-        }
-        
-        .home-link {
-            display: block;
-            text-align: center;
-            margin-top: 40px;
-            color: #87ceeb;
-            text-decoration: none;
-        }
-        
-        .home-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 添加代码高亮 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+    <!-- 添加字体 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+    <!-- 添加图标库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
-<body style="background-color: #1a1a1a; background-image: linear-gradient(45deg, #1a1a1a 25%, #222222 25%, #222222 50%, #1a1a1a 50%, #1a1a1a 75%, #222222 75%, #222222 100%); background-size: 40px 40px; background-attachment: fixed;">
-    <div class="blog-container">
-        <div class="blog-header">
-            <h1>Tianjinsa的博客</h1>
-            <p>分享技术文章和个人心得</p>
+<body>    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">Tianjinsa</a>
+        <ul class="navbar-links">
+            <li><a href="index.html" class="active"><i class="bi bi-house"></i> 首页</a></li>
+            <li><a href="archives.html"><i class="bi bi-archive"></i> 归档</a></li>
+            <li><a href="tags.html"><i class="bi bi-tags"></i> 标签</a></li>
+            <li><a href="about.html"><i class="bi bi-person"></i> 关于</a></li>
+        </ul>
+        <div class="navbar-toggle" id="navbar-toggle">
+            <i class="bi bi-list"></i>
         </div>
-        
-        <div id="blog-content">
-            <!-- 博客列表将通过JavaScript动态加载 -->
-            <div class="no-blogs">
-                <p>正在加载博客内容...</p>
+    </nav>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="blog-header">
+                <h1>Tianjinsa的博客</h1>
+                <p>分享技术文章和个人心得</p>            </div>
+            
+            <!-- 搜索栏 -->
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="搜索博客文章..." aria-label="搜索博客文章">
+                <button id="search-btn" class="search-button"><i class="bi bi-search"></i></button>
+            </div>
+            
+            <!-- 标签筛选 -->
+            <div id="tags-filter" class="tags-filter">
+                <!-- 标签将通过JavaScript动态加载 -->
+            </div>
+
+            <div id="blog-content">
+                <!-- 博客列表将通过JavaScript动态加载 -->
+                <div class="no-blogs">
+                    <p>正在加载博客内容...</p>
+                </div>
             </div>
         </div>
         
-        <a href="../index.html" class="home-link">返回主页</a>
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>&copy; <span id="current-year">2025</span> Tianjinsa. 保留所有权利。</p>
+            <p>使用 <a href="https://pages.github.com/" target="_blank">GitHub Pages</a> 构建</p>
+        </footer>
     </div>
     
-    <script>
+    <!-- 代码高亮 -->
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+      <script>
         document.addEventListener('DOMContentLoaded', function() {
             const blogContentEl = document.getElementById('blog-content');
+            const searchInputEl = document.getElementById('search-input');
+            const searchBtnEl = document.getElementById('search-btn');
+            const tagsFilterEl = document.getElementById('tags-filter');
+            const navbarToggleEl = document.getElementById('navbar-toggle');
+            const navbarLinksEl = document.querySelector('.navbar-links');
+            
+            // 设置当前年份
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // 移动端导航菜单切换
+            if (navbarToggleEl && navbarLinksEl) {
+                navbarToggleEl.addEventListener('click', function() {
+                    navbarLinksEl.classList.toggle('active');
+                });
+            }
+            
             const repoOwner = 'tianjinsa';
-            const repoName = 'tianjinsa.github.io';
-            const blogPath = 'blog';
+            const repoName = 'blog';
+            const blogPath = '__posts';
+            
+            // 存储所有博客文章和标签
+            let allBlogPosts = [];
+            let allTags = new Set();
+            let activeTag = null;
             
             // 从GitHub获取博客文件列表
             fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${blogPath}`)
@@ -167,9 +128,6 @@
                         return;
                     }
                     
-                    // 创建博客列表
-                    let blogListHTML = '<ul class="blog-list">';
-                    
                     // 处理每个博客文件
                     const fetchPromises = blogFiles.map(file => {
                         return fetch(file.download_url)
@@ -180,11 +138,12 @@
                                 let title = file.name.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace('.md', '');
                                 let date = file.name.substring(0, 10);
                                 let excerpt = '';
-                                
+                                let tags = [];                                
                                 if (frontmatterMatch) {
                                     const frontmatter = frontmatterMatch[1];
                                     const titleMatch = frontmatter.match(/title:\s*"(.+?)"/);
                                     const dateMatch = frontmatter.match(/date:\s*"(.+?)"/);
+                                    const tagsMatch = frontmatter.match(/tags:\s*\[(.*?)\]/);
                                     
                                     if (titleMatch) title = titleMatch[1];
                                     if (dateMatch) {
@@ -196,6 +155,16 @@
                                         });
                                     }
                                     
+                                    // 解析标签
+                                    if (tagsMatch) {
+                                        tags = tagsMatch[1].split(',')
+                                            .map(tag => tag.trim().replace(/["']/g, ''))
+                                            .filter(tag => tag);
+                                        
+                                        // 添加到全局标签集合
+                                        tags.forEach(tag => allTags.add(tag));
+                                    }
+                                    
                                     // 提取正文的前150个字符作为摘要
                                     const mainContent = content.replace(frontmatterMatch[0], '').trim();
                                     excerpt = mainContent.substring(0, 150) + (mainContent.length > 150 ? '...' : '');
@@ -204,25 +173,30 @@
                                 // 创建博客链接页面地址，使用文件名作为链接
                                 const blogUrl = `./posts/${file.name.replace('.md', '.html')}`;
                                 
+                                // 保存博客信息
+                                const postData = {
+                                    title,
+                                    date,
+                                    displayDate: date,
+                                    excerpt,
+                                    tags,
+                                    url: blogUrl,
+                                    fileName: file.name
+                                };
+                                
+                                allBlogPosts.push(postData);
+                                
                                 // 返回HTML片段
-                                return `
-                                    <li class="blog-item">
-                                        <h2 class="blog-title">
-                                            <a href="${blogUrl}">${title}</a>
-                                        </h2>
-                                        <span class="blog-date">${date}</span>
-                                        <p class="blog-excerpt">${excerpt}</p>
-                                        <a href="${blogUrl}" class="read-more">阅读全文 →</a>
-                                    </li>
-                                `;
-                            })
+                                return generateBlogCard(postData);                            })
                             .catch(error => {
                                 console.error(`加载博客 ${file.name} 失败:`, error);
                                 return `
-                                    <li class="blog-item">
-                                        <h2 class="blog-title">${file.name}</h2>
-                                        <p class="blog-excerpt">加载博客内容失败</p>
-                                    </li>
+                                    <div class="blog-card">
+                                        <div class="blog-card-content">
+                                            <h2 class="blog-card-title">${file.name}</h2>
+                                            <p class="blog-card-excerpt">加载博客内容失败</p>
+                                        </div>
+                                    </div>
                                 `;
                             });
                     });
@@ -230,8 +204,18 @@
                     // 处理所有博客内容加载完成后的操作
                     Promise.all(fetchPromises)
                         .then(blogItems => {
-                            blogListHTML += blogItems.join('') + '</ul>';
-                            blogContentEl.innerHTML = blogListHTML;
+                            blogContentEl.innerHTML = blogItems.join('');
+                            
+                            // 生成标签过滤器
+                            generateTagsFilter();
+                            
+                            // 初始化搜索功能
+                            initSearch();
+                            
+                            // 初始化代码高亮
+                            if (typeof Prism !== 'undefined') {
+                                Prism.highlightAll();
+                            }
                         })
                         .catch(error => {
                             console.error('加载博客内容失败:', error);
@@ -250,6 +234,146 @@
                         </div>
                     `;
                 });
+                
+            // 生成标签过滤器
+            function generateTagsFilter() {
+                if (allTags.size === 0) {
+                    tagsFilterEl.style.display = 'none';
+                    return;
+                }
+                
+                let tagsHTML = `<div class="tags-heading">按标签筛选:</div><div class="tags-list">`;
+                tagsHTML += `<span class="tag active" data-tag="all">全部</span>`;
+                
+                Array.from(allTags).sort().forEach(tag => {
+                    tagsHTML += `<span class="tag" data-tag="${tag}">${tag}</span>`;
+                });
+                
+                tagsHTML += `</div>`;
+                tagsFilterEl.innerHTML = tagsHTML;
+                
+                // 添加标签点击事件
+                document.querySelectorAll('#tags-filter .tag').forEach(tagEl => {
+                    tagEl.addEventListener('click', function() {
+                        // 移除所有标签的active类
+                        document.querySelectorAll('#tags-filter .tag').forEach(el => {
+                            el.classList.remove('active');
+                        });
+                        
+                        // 添加当前标签的active类
+                        this.classList.add('active');
+                        
+                        // 过滤博客文章
+                        const selectedTag = this.getAttribute('data-tag');
+                        filterBlogsByTag(selectedTag);
+                    });
+                });
+            }
+            
+            // 根据标签筛选博客文章
+            function filterBlogsByTag(tag) {
+                if (tag === 'all') {
+                    // 显示所有文章
+                    activeTag = null;
+                    renderBlogPosts(allBlogPosts);
+                } else {
+                    // 筛选有特定标签的文章
+                    activeTag = tag;
+                    const filteredPosts = allBlogPosts.filter(post => {
+                        return post.tags.includes(tag);
+                    });
+                    renderBlogPosts(filteredPosts);
+                }
+            }
+            
+            // 初始化搜索功能
+            function initSearch() {
+                // 搜索按钮点击事件
+                searchBtnEl.addEventListener('click', performSearch);
+                
+                // 输入框回车事件
+                searchInputEl.addEventListener('keyup', function(event) {
+                    if (event.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
+            
+            // 执行搜索
+            function performSearch() {
+                const searchTerm = searchInputEl.value.trim().toLowerCase();
+                
+                if (searchTerm === '') {
+                    // 如果搜索词为空，恢复显示（考虑当前激活的标签）
+                    if (activeTag) {
+                        filterBlogsByTag(activeTag);
+                    } else {
+                        renderBlogPosts(allBlogPosts);
+                    }
+                    return;
+                }
+                
+                // 根据搜索词过滤博客
+                const filteredPosts = allBlogPosts.filter(post => {
+                    // 如果有激活的标签，则只在该标签的文章中搜索
+                    if (activeTag && !post.tags.includes(activeTag)) {
+                        return false;
+                    }
+                    
+                    // 搜索标题、摘要和标签
+                    return post.title.toLowerCase().includes(searchTerm) || 
+                           post.excerpt.toLowerCase().includes(searchTerm) || 
+                           post.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                });
+                
+                renderBlogPosts(filteredPosts);
+            }
+            
+            // 渲染博客文章列表
+            function renderBlogPosts(posts) {
+                if (posts.length === 0) {
+                    blogContentEl.innerHTML = `
+                        <div class="no-blogs">
+                            <p>没有找到相关文章</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                blogContentEl.innerHTML = posts.map(generateBlogCard).join('');
+                
+                // 重新应用代码高亮
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightAll();
+                }
+            }
+            
+            // 生成博客卡片HTML
+            function generateBlogCard(post) {
+                const tagsHTML = post.tags.length > 0 
+                    ? `<div class="blog-tags">
+                        ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                       </div>` 
+                    : '';
+                
+                return `
+                    <div class="blog-card">
+                        <div class="blog-card-content">
+                            <h2 class="blog-card-title">
+                                <a href="${post.url}">${post.title}</a>
+                            </h2>
+                            <div class="blog-card-meta">
+                                <span><i class="bi bi-calendar"></i> ${post.displayDate}</span>
+                                ${tagsHTML}
+                            </div>
+                            <p class="blog-card-excerpt">${post.excerpt}</p>
+                            <div class="blog-card-footer">
+                                <a href="${post.url}" class="read-more">阅读全文 →</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
         });
     </script>
 </body>

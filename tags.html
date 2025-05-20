@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tianjinsa博客的标签页 - 通过标签浏览文章">
+    <meta name="keywords" content="Tianjinsa, 博客, 标签, 技术分享">
+    <meta name="author" content="Tianjinsa">
+    <!-- 网站图标 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+    <!-- 社交媒体预览 -->
+    <meta property="og:title" content="标签 - Tianjinsa的博客">
+    <meta property="og:description" content="通过标签浏览文章">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tianjinsa.github.io/blog/tags.html">
+    <title>标签 - Tianjinsa的博客</title>
+    <!-- 引入样式文件 -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- 添加图标库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .tags-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tags-cloud {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .tag-cloud-item {
+            display: inline-block;
+            margin: 8px 5px;
+        }
+        
+        .tag-size-1 { font-size: 0.9em; }
+        .tag-size-2 { font-size: 1.1em; }
+        .tag-size-3 { font-size: 1.3em; }
+        .tag-size-4 { font-size: 1.5em; }
+        .tag-size-5 { font-size: 1.7em; }
+        
+        .tag-section {
+            margin-bottom: 40px;
+        }
+        
+        .tag-heading {
+            font-size: 1.8em;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+        
+        .tag-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .tag-item {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+        
+        .tag-item:last-child {
+            border-bottom: none;
+        }
+        
+        .tag-item-title {
+            font-size: 1.1em;
+        }
+        
+        .tag-item-title a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .tag-item-title a:hover {
+            color: var(--accent-color);
+        }
+        
+        .tag-item-meta {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">Tianjinsa</a>
+        <ul class="navbar-links">
+            <li><a href="index.html"><i class="bi bi-house"></i> 首页</a></li>
+            <li><a href="archives.html"><i class="bi bi-archive"></i> 归档</a></li>
+            <li><a href="tags.html" class="active"><i class="bi bi-tags"></i> 标签</a></li>
+            <li><a href="about.html"><i class="bi bi-person"></i> 关于</a></li>
+        </ul>
+        <div class="navbar-toggle" id="navbar-toggle">
+            <i class="bi bi-list"></i>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h1>文章标签</h1>
+                <p>通过标签浏览文章</p>
+            </div>
+            
+            <div class="tags-container">
+                <div id="tags-cloud" class="tags-cloud">
+                    <!-- 标签云将通过JavaScript动态加载 -->
+                    <p>正在加载标签云...</p>
+                </div>
+                
+                <div id="tags-content">
+                    <!-- 标签内容将通过JavaScript动态加载 -->
+                    <div class="loading-indicator">
+                        <p>正在加载标签内容...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>&copy; <span id="current-year">2025</span> Tianjinsa. 保留所有权利。</p>
+            <p>使用 <a href="https://pages.github.com/" target="_blank">GitHub Pages</a> 构建</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tagsCloudEl = document.getElementById('tags-cloud');
+            const tagsContentEl = document.getElementById('tags-content');
+            const navbarToggleEl = document.getElementById('navbar-toggle');
+            const navbarLinksEl = document.querySelector('.navbar-links');
+            
+            // 设置当前年份
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // 移动端导航菜单切换
+            if (navbarToggleEl && navbarLinksEl) {
+                navbarToggleEl.addEventListener('click', function() {
+                    navbarLinksEl.classList.toggle('active');
+                });
+            }
+            
+            const repoOwner = 'tianjinsa';
+            const repoName = 'tianjinsa.github.io';
+            const blogPath = 'blog';
+            
+            // 存储标签数据
+            const tagData = {};
+            
+            // 从GitHub获取博客文件列表
+            fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${blogPath}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('获取博客列表失败');
+                    }
+                    return response.json();
+                })
+                .then(files => {
+                    // 过滤出.md文件
+                    const blogFiles = files.filter(file => file.name.endsWith('.md'));
+                    
+                    if (blogFiles.length === 0) {
+                        tagsCloudEl.innerHTML = `<p>暂无标签</p>`;
+                        tagsContentEl.innerHTML = `<p>暂无博客文章</p>`;
+                        return;
+                    }
+                    
+                    // 处理每个博客文件
+                    const fetchPromises = blogFiles.map(file => {
+                        return fetch(file.download_url)
+                            .then(response => response.text())
+                            .then(content => {
+                                // 解析frontmatter和内容
+                                const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n/);
+                                let title = file.name.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace('.md', '');
+                                let date = file.name.substring(0, 10);
+                                let tags = [];
+                                
+                                if (frontmatterMatch) {
+                                    const frontmatter = frontmatterMatch[1];
+                                    const titleMatch = frontmatter.match(/title:\s*"(.+?)"/);
+                                    const dateMatch = frontmatter.match(/date:\s*"(.+?)"/);
+                                    const tagsMatch = frontmatter.match(/tags:\s*\[(.*?)\]/);
+                                    
+                                    if (titleMatch) title = titleMatch[1];
+                                    if (dateMatch) {
+                                        const dateObj = new Date(dateMatch[1]);
+                                        date = dateObj.toLocaleDateString('zh-CN', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        });
+                                    }
+                                    
+                                    // 解析标签
+                                    if (tagsMatch) {
+                                        tags = tagsMatch[1].split(',')
+                                            .map(tag => tag.trim().replace(/["']/g, ''))
+                                            .filter(tag => tag);
+                                    }
+                                }
+                                
+                                // 创建博客链接页面地址
+                                const blogUrl = `./posts/${file.name.replace('.md', '.html')}`;
+                                
+                                // 组织标签数据
+                                tags.forEach(tag => {
+                                    if (!tagData[tag]) {
+                                        tagData[tag] = [];
+                                    }
+                                    
+                                    tagData[tag].push({
+                                        title,
+                                        date,
+                                        url: blogUrl
+                                    });
+                                });
+                            })
+                            .catch(error => {
+                                console.error(`加载博客 ${file.name} 失败:`, error);
+                            });
+                    });
+                    
+                    // 处理所有博客内容加载完成后的操作
+                    Promise.all(fetchPromises)
+                        .then(() => {
+                            // 生成标签云
+                            generateTagsCloud();
+                            
+                            // 生成标签内容
+                            generateTagsContent();
+                        })
+                        .catch(error => {
+                            console.error('加载标签内容失败:', error);
+                            tagsContentEl.innerHTML = `
+                                <div class="error-message">
+                                    <p>加载标签内容出错</p>
+                                </div>
+                            `;
+                        });
+                })
+                .catch(error => {
+                    console.error('获取博客列表失败:', error);
+                    tagsCloudEl.innerHTML = `
+                        <div class="error-message">
+                            <p>获取标签列表失败: ${error.message}</p>
+                        </div>
+                    `;
+                });
+            
+            // 生成标签云
+            function generateTagsCloud() {
+                const tags = Object.keys(tagData);
+                
+                if (tags.length === 0) {
+                    tagsCloudEl.innerHTML = `<p>暂无标签</p>`;
+                    return;
+                }
+                
+                // 计算每个标签的文章数
+                const tagCounts = {};
+                tags.forEach(tag => {
+                    tagCounts[tag] = tagData[tag].length;
+                });
+                
+                // 找出最小和最大文章数
+                const counts = Object.values(tagCounts);
+                const minCount = Math.min(...counts);
+                const maxCount = Math.max(...counts);
+                
+                // 计算标签大小（1-5）
+                const getTagSize = (count) => {
+                    if (maxCount === minCount) return 3;
+                    const size = Math.ceil(((count - minCount) / (maxCount - minCount)) * 4) + 1;
+                    return Math.min(Math.max(size, 1), 5);
+                };
+                
+                // 生成HTML
+                let cloudHTML = '';
+                tags.sort().forEach(tag => {
+                    const count = tagCounts[tag];
+                    const size = getTagSize(count);
+                    cloudHTML += `
+                        <div class="tag-cloud-item">
+                            <a href="#${tag}" class="tag tag-size-${size}">${tag} (${count})</a>
+                        </div>
+                    `;
+                });
+                
+                tagsCloudEl.innerHTML = cloudHTML;
+            }
+            
+            // 生成标签内容
+            function generateTagsContent() {
+                const tags = Object.keys(tagData);
+                
+                if (tags.length === 0) {
+                    tagsContentEl.innerHTML = `<p>暂无标签内容</p>`;
+                    return;
+                }
+                
+                let contentHTML = '';
+                
+                tags.sort().forEach(tag => {
+                    const posts = tagData[tag];
+                    
+                    contentHTML += `
+                        <div id="${tag}" class="tag-section">
+                            <h2 class="tag-heading">${tag}</h2>
+                            <ul class="tag-list">
+                    `;
+                    
+                    posts.forEach(post => {
+                        contentHTML += `
+                            <li class="tag-item">
+                                <div class="tag-item-title">
+                                    <a href="${post.url}">${post.title}</a>
+                                </div>
+                                <div class="tag-item-meta">
+                                    <span><i class="bi bi-calendar"></i> ${post.date}</span>
+                                </div>
+                            </li>
+                        `;
+                    });
+                    
+                    contentHTML += `
+                            </ul>
+                        </div>
+                    `;
+                });
+                
+                tagsContentEl.innerHTML = contentHTML;
+            }
+        });
+    </script>
+</body>
+</html>

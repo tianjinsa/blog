@@ -48,7 +48,7 @@ p {
 
 /* 博客编辑器特有样式 */
 .login-container, .editor-container {
-    max-width: 980px; /* Unified max-width */
+    max-width: 70vw; /* Unified max-width */
     margin: 50px auto;
     padding: 40px; /* Adjusted padding */
     background-color: var(--content-bg);
@@ -222,7 +222,7 @@ button:active {
 
 .editor-pane,
 .preview-pane-container { /* 修改为新的容器类名 */
-    width: 59.1vw; /* 宽度占满 */
+    width: 69vw; /* 宽度占满 */
     /* min-height: 400px; */ /* 移除固定最小高度，改为限制高度 */
     max-height: 50vh; /* 限制最大高度为视口高度的一半 */
     overflow-y: auto; /* 内容超出时显示滚动条 */
@@ -268,7 +268,7 @@ button:active {
 
 #blog-content {
     height: 45vh; /* 编辑器高度 */
-    width: 59.5vw;
+    width: 69vw;
     resize: vertical;
 }
 

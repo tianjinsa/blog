@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="BLOG_DESCRIPTION">
+    <meta name="keywords" content="BLOG_KEYWORDS">
+    <meta name="author" content="Tianjinsa">
     <!-- 网站图标 -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
     <!-- 社交媒体预览 -->
@@ -16,171 +18,211 @@
     <title>BLOG_TITLE - Tianjinsa的博客</title>
     <!-- 引入样式文件 -->
     <link rel="stylesheet" href="../../styles.css">
-    <style>
-        .blog-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: #282828;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-        }
-        
-        .blog-header {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #444444;
-        }
-        
-        .blog-title {
-            font-size: 2.2em;
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-        
-        .blog-meta {
-            color: #888888;
-            font-size: 0.9em;
-        }
-        
-        .blog-content {
-            line-height: 1.8;
-            color: #e0e0e0;
-        }
-        
-        .blog-content h1, .blog-content h2, .blog-content h3 {
-            color: #ffffff;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        
-        .blog-content h1 {
-            font-size: 1.8em;
-            border-bottom: 1px solid #444444;
-            padding-bottom: 10px;
-        }
-        
-        .blog-content h2 {
-            font-size: 1.5em;
-        }
-        
-        .blog-content h3 {
-            font-size: 1.3em;
-        }
-        
-        .blog-content p {
-            margin-bottom: 20px;
-        }
-        
-        .blog-content a {
-            color: #87ceeb;
-            text-decoration: none;
-        }
-        
-        .blog-content a:hover {
-            text-decoration: underline;
-        }
-        
-        .blog-content img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 20px auto;
-            border-radius: 5px;
-        }
-        
-        .blog-content blockquote {
-            border-left: 4px solid #87ceeb;
-            padding-left: 20px;
-            margin: 20px 0;
-            color: #b0b0b0;
-        }
-        
-        .blog-content pre {
-            background-color: #1a1a1a;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-        
-        .blog-content code {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-        
-        .blog-content pre code {
-            background-color: transparent;
-            padding: 0;
-        }
-        
-        .blog-content ul, .blog-content ol {
-            margin: 20px 0;
-            padding-left: 25px;
-        }
-        
-        .blog-content li {
-            margin-bottom: 10px;
-        }
-        
-        .blog-content table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        
-        .blog-content th, .blog-content td {
-            padding: 10px;
-            border: 1px solid #444444;
-            text-align: left;
-        }
-        
-        .blog-content th {
-            background-color: #1a1a1a;
-        }
-        
-        .blog-nav {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #444444;
-        }
-        
-        .blog-nav a {
-            color: #87ceeb;
-            text-decoration: none;
-        }
-        
-        .blog-nav a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <!-- 添加代码高亮 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+    <!-- 添加字体 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+    <!-- 添加图标库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body>
-    <div class="blog-container">
-        <div class="blog-header">
-            <h1 class="blog-title">BLOG_TITLE</h1>
-            <div class="blog-meta">发布于 BLOG_DATE</div>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="../../index.html" class="navbar-brand">Tianjinsa</a>
+        <ul class="navbar-links">
+            <li><a href="../../index.html"><i class="bi bi-house"></i> 首页</a></li>
+            <li><a href="../../archives.html"><i class="bi bi-archive"></i> 归档</a></li>
+            <li><a href="../../tags.html"><i class="bi bi-tags"></i> 标签</a></li>
+            <li><a href="../../about.html"><i class="bi bi-person"></i> 关于</a></li>
+        </ul>
+        <div class="navbar-toggle" id="navbar-toggle">
+            <i class="bi bi-list"></i>
         </div>
-        
-        <div class="blog-content">
-            BLOG_CONTENT
+    </nav>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <article class="blog-container">                <header class="blog-header">
+                    <h1 class="blog-title">BLOG_TITLE</h1>                    <div class="blog-meta">
+                        <span><i class="bi bi-calendar"></i> BLOG_DATE</span>
+                        <span class="blog-tags">BLOG_TAGS</span>
+                        <span class="read-count" title="本地阅读计数，仅在当前设备上有效"><i class="bi bi-eye"></i> 本地阅读 <span id="read-count">0</span></span>
+                    </div>
+                </header>
+                
+                <div class="table-of-contents" id="table-of-contents">
+                    <h3><i class="bi bi-list-nested"></i> 目录</h3>
+                    <div id="toc-content">
+                        <!-- 目录内容将通过JavaScript生成 -->
+                    </div>
+                </div>
+                
+                <div class="blog-content">
+                    BLOG_CONTENT
+                </div>
+                
+                <div class="blog-nav">
+                    <a href="../../index.html" class="btn"><i class="bi bi-arrow-left"></i> 返回博客列表</a>
+                </div>
+                  <!-- 评论区 -->
+                <div class="comments-section">
+                    <h3>评论</h3>
+                    <div id="comments-container">
+                        <!-- GitHub Pages评论集成方案 -->
+                        <div class="static-comments-notice">
+                            <p>这是静态博客，您可以通过以下方式参与讨论：</p>
+                            <ul>
+                                <li><a href="https://github.com/tianjinsa/tianjinsa.github.io/issues" target="_blank"><i class="bi bi-github"></i> 在GitHub Issues中留言</a></li>
+                                <li><a href="mailto:your.email@example.com"><i class="bi bi-envelope"></i> 通过邮件与我联系</a></li>
+                            </ul>
+                            
+                            <!-- 如果您想添加第三方评论系统，可以取消注释下方的代码并替换为您的评论系统代码 -->
+                            <!--
+                            <div class="third-party-comments">
+                                <h4>添加评论</h4>
+                                <div id="utterances-container"></div>
+                                <script src="https://utteranc.es/client.js"
+                                    repo="tianjinsa/tianjinsa.github.io"
+                                    issue-term="pathname"
+                                    theme="github-dark"
+                                    crossorigin="anonymous"
+                                    async>
+                                </script>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </article>
         </div>
-        
-        <div class="blog-nav">
-            <a href="../index.html">← 返回博客列表</a>
-            <a href="../../index.html">返回主页</a>
-        </div>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>&copy; <span id="current-year">2025</span> Tianjinsa. 保留所有权利。</p>
+            <p>使用 <a href="https://pages.github.com/" target="_blank">GitHub Pages</a> 构建</p>
+        </footer>
     </div>
+      <!-- 代码高亮 -->
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <!-- 本地阅读记录功能 -->
+    <script src="../../js/read-count.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 高亮代码块（如果需要，可以引入如Prism.js等库实现）
+            const navbarToggleEl = document.getElementById('navbar-toggle');
+            const navbarLinksEl = document.querySelector('.navbar-links');
+            const tocContentEl = document.getElementById('toc-content');
             
-            // 处理图片懒加载和点击放大等功能（如果需要）
+            // 设置当前年份
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // 移动端导航菜单切换
+            if (navbarToggleEl && navbarLinksEl) {
+                navbarToggleEl.addEventListener('click', function() {
+                    navbarLinksEl.classList.toggle('active');
+                });
+            }
+            
+            // 生成目录
+            generateTableOfContents();
+            
+            // 应用代码高亮
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAll();
+            }
+            
+            // 图片点击放大功能
+            setupImageZoom();
+            
+            // 生成目录
+            function generateTableOfContents() {
+                const headings = document.querySelectorAll('.blog-content h2, .blog-content h3');
+                
+                if (headings.length === 0) {
+                    document.getElementById('table-of-contents').style.display = 'none';
+                    return;
+                }
+                
+                let tocHTML = '<ul class="toc-list">';
+                let currentLevel = 0;
+                let counter = 0;
+                
+                headings.forEach((heading, index) => {
+                    const level = parseInt(heading.tagName.charAt(1)) - 1; // H2 -> 1, H3 -> 2
+                    const headingText = heading.textContent;
+                    const headingId = `heading-${index}`;
+                    
+                    // 为标题添加ID，以便链接
+                    heading.id = headingId;
+                    
+                    // 调整嵌套层级
+                    if (level > currentLevel) {
+                        for (let i = 0; i < level - currentLevel; i++) {
+                            tocHTML += '<ul>';
+                        }
+                    } else if (level < currentLevel) {
+                        for (let i = 0; i < currentLevel - level; i++) {
+                            tocHTML += '</ul>';
+                        }
+                    }
+                    
+                    currentLevel = level;
+                    
+                    // 添加目录项
+                    tocHTML += `<li><a href="#${headingId}">${headingText}</a></li>`;
+                });
+                
+                // 闭合所有打开的ul标签
+                for (let i = 0; i < currentLevel; i++) {
+                    tocHTML += '</ul>';
+                }
+                
+                tocHTML += '</ul>';
+                tocContentEl.innerHTML = tocHTML;
+            }
+            
+            // 设置图片点击放大
+            function setupImageZoom() {
+                const images = document.querySelectorAll('.blog-content img');
+                const body = document.body;
+                
+                images.forEach(img => {
+                    img.style.cursor = 'zoom-in';
+                    img.addEventListener('click', function() {
+                        const overlay = document.createElement('div');
+                        overlay.className = 'image-zoom-overlay';
+                        overlay.style.position = 'fixed';
+                        overlay.style.top = '0';
+                        overlay.style.left = '0';
+                        overlay.style.width = '100%';
+                        overlay.style.height = '100%';
+                        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        overlay.style.display = 'flex';
+                        overlay.style.alignItems = 'center';
+                        overlay.style.justifyContent = 'center';
+                        overlay.style.zIndex = '1000';
+                        overlay.style.cursor = 'zoom-out';
+                        
+                        const zoomedImg = document.createElement('img');
+                        zoomedImg.src = this.src;
+                        zoomedImg.style.maxWidth = '90%';
+                        zoomedImg.style.maxHeight = '90%';
+                        zoomedImg.style.objectFit = 'contain';
+                        zoomedImg.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.5)';
+                        
+                        overlay.appendChild(zoomedImg);
+                        body.appendChild(overlay);
+                        body.style.overflow = 'hidden';
+                        
+                        overlay.addEventListener('click', function() {
+                            body.removeChild(overlay);
+                            body.style.overflow = '';
+                        });
+                    });
+                });
+            }
         });
     </script>
 </body>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tianjinsa的博客归档 - 按时间浏览所有文章">
+    <meta name="keywords" content="Tianjinsa, 博客, 技术分享, 开发笔记, 归档">
+    <meta name="author" content="Tianjinsa">
+    <!-- 网站图标 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+    <!-- 社交媒体预览 -->
+    <meta property="og:title" content="博客归档 - Tianjinsa">
+    <meta property="og:description" content="按时间浏览所有文章">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tianjinsa.github.io/blog/archives.html">
+    <title>博客归档 - Tianjinsa</title>
+    <!-- 引入样式文件 -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- 添加图标库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .archives-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .year-section {
+            margin-bottom: 40px;
+        }
+        
+        .year-heading {
+            font-size: 1.8em;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .month-section {
+            margin-bottom: 30px;
+        }
+        
+        .month-heading {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .archive-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .archive-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .archive-item:last-child {
+            border-bottom: none;
+        }
+        
+        .archive-date {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            min-width: 100px;
+        }
+        
+        .archive-title {
+            flex-grow: 1;
+            padding: 0 15px;
+        }
+        
+        .archive-title a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .archive-title a:hover {
+            color: var(--accent-color);
+        }
+        
+        .archive-tag {
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">Tianjinsa</a>
+        <ul class="navbar-links">
+            <li><a href="index.html"><i class="bi bi-house"></i> 首页</a></li>
+            <li><a href="archives.html" class="active"><i class="bi bi-archive"></i> 归档</a></li>
+            <li><a href="tags.html"><i class="bi bi-tags"></i> 标签</a></li>
+            <li><a href="about.html"><i class="bi bi-person"></i> 关于</a></li>
+        </ul>
+        <div class="navbar-toggle" id="navbar-toggle">
+            <i class="bi bi-list"></i>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h1>博客归档</h1>
+                <p>按时间浏览所有文章</p>
+            </div>
+            
+            <div id="archives-content" class="archives-container">
+                <div class="loading-indicator">
+                    <p>正在加载归档内容...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>&copy; <span id="current-year">2025</span> Tianjinsa. 保留所有权利。</p>
+            <p>使用 <a href="https://pages.github.com/" target="_blank">GitHub Pages</a> 构建</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const archivesContentEl = document.getElementById('archives-content');
+            const navbarToggleEl = document.getElementById('navbar-toggle');
+            const navbarLinksEl = document.querySelector('.navbar-links');
+            
+            // 设置当前年份
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // 移动端导航菜单切换
+            if (navbarToggleEl && navbarLinksEl) {
+                navbarToggleEl.addEventListener('click', function() {
+                    navbarLinksEl.classList.toggle('active');
+                });
+            }
+            
+            const repoOwner = 'tianjinsa';
+            const repoName = 'tianjinsa.github.io';
+            const blogPath = 'blog';
+            
+            // 从GitHub获取博客文件列表
+            fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${blogPath}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('获取博客列表失败');
+                    }
+                    return response.json();
+                })
+                .then(files => {
+                    // 过滤出.md文件并按日期排序
+                    const blogFiles = files
+                        .filter(file => file.name.endsWith('.md'))
+                        .sort((a, b) => {
+                            // 假设文件名格式为: YYYY-MM-DD-title.md
+                            const dateA = a.name.substring(0, 10);
+                            const dateB = b.name.substring(0, 10);
+                            return dateB.localeCompare(dateA); // 降序排列
+                        });
+                    
+                    if (blogFiles.length === 0) {
+                        archivesContentEl.innerHTML = `
+                            <div class="no-blogs">
+                                <p>暂无博客文章</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // 按年份和月份组织博客文章
+                    const blogsByYearMonth = {};
+                    
+                    // 处理每个博客文件
+                    const fetchPromises = blogFiles.map(file => {
+                        return fetch(file.download_url)
+                            .then(response => response.text())
+                            .then(content => {
+                                // 解析frontmatter和内容
+                                const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n/);
+                                let title = file.name.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace('.md', '');
+                                const dateStr = file.name.substring(0, 10);
+                                let tags = [];
+                                
+                                if (frontmatterMatch) {
+                                    const frontmatter = frontmatterMatch[1];
+                                    const titleMatch = frontmatter.match(/title:\s*"(.+?)"/);
+                                    const tagsMatch = frontmatter.match(/tags:\s*\[(.*?)\]/);
+                                    
+                                    if (titleMatch) title = titleMatch[1];
+                                    
+                                    // 解析标签
+                                    if (tagsMatch) {
+                                        tags = tagsMatch[1].split(',')
+                                            .map(tag => tag.trim().replace(/["']/g, ''))
+                                            .filter(tag => tag);
+                                    }
+                                }
+                                
+                                // 创建博客链接页面地址，使用文件名作为链接
+                                const blogUrl = `./posts/${file.name.replace('.md', '.html')}`;
+                                
+                                // 解析日期
+                                const year = dateStr.substring(0, 4);
+                                const month = dateStr.substring(5, 7);
+                                
+                                // 组织数据结构
+                                if (!blogsByYearMonth[year]) {
+                                    blogsByYearMonth[year] = {};
+                                }
+                                
+                                if (!blogsByYearMonth[year][month]) {
+                                    blogsByYearMonth[year][month] = [];
+                                }
+                                
+                                blogsByYearMonth[year][month].push({
+                                    title,
+                                    date: dateStr,
+                                    url: blogUrl,
+                                    tags
+                                });
+                            })
+                            .catch(error => {
+                                console.error(`加载博客 ${file.name} 失败:`, error);
+                            });
+                    });
+                    
+                    // 处理所有博客内容加载完成后的操作
+                    Promise.all(fetchPromises)
+                        .then(() => {
+                            let archivesHTML = '';
+                            
+                            // 获取排序后的年份（降序）
+                            const years = Object.keys(blogsByYearMonth).sort((a, b) => b - a);
+                            
+                            years.forEach(year => {
+                                archivesHTML += `<div class="year-section">
+                                    <h2 class="year-heading">${year}年</h2>`;
+                                
+                                // 获取排序后的月份（降序）
+                                const months = Object.keys(blogsByYearMonth[year]).sort((a, b) => b - a);
+                                
+                                months.forEach(month => {
+                                    const monthNames = {
+                                        '01': '一月', '02': '二月', '03': '三月', '04': '四月',
+                                        '05': '五月', '06': '六月', '07': '七月', '08': '八月',
+                                        '09': '九月', '10': '十月', '11': '十一月', '12': '十二月'
+                                    };
+                                    
+                                    archivesHTML += `<div class="month-section">
+                                        <h3 class="month-heading">${monthNames[month]}</h3>
+                                        <ul class="archive-list">`;
+                                    
+                                    blogsByYearMonth[year][month].forEach(post => {
+                                        const day = post.date.substring(8, 10);
+                                        const displayDate = `${month}-${day}`;
+                                        
+                                        // 生成标签HTML
+                                        let tagsHTML = '';
+                                        if (post.tags && post.tags.length > 0) {
+                                            tagsHTML = post.tags.map(tag => 
+                                                `<span class="tag archive-tag">${tag}</span>`
+                                            ).join('');
+                                        }
+                                        
+                                        archivesHTML += `<li class="archive-item">
+                                            <span class="archive-date">${displayDate}</span>
+                                            <span class="archive-title"><a href="${post.url}">${post.title}</a></span>
+                                            <span class="archive-tags">${tagsHTML}</span>
+                                        </li>`;
+                                    });
+                                    
+                                    archivesHTML += `</ul></div>`;
+                                });
+                                
+                                archivesHTML += `</div>`;
+                            });
+                            
+                            archivesContentEl.innerHTML = archivesHTML;
+                        })
+                        .catch(error => {
+                            console.error('加载归档内容失败:', error);
+                            archivesContentEl.innerHTML = `
+                                <div class="error-message">
+                                    <p>加载归档内容出错</p>
+                                </div>
+                            `;
+                        });
+                })
+                .catch(error => {
+                    console.error('获取博客列表失败:', error);
+                    archivesContentEl.innerHTML = `
+                        <div class="error-message">
+                            <p>获取博客列表失败: ${error.message}</p>
+                        </div>
+                    `;
+                });
+        });
+    </script>
+</body>
+</html>

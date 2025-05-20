@@ -31,6 +31,8 @@ function cacheElements() {
         //loginContainer: document.querySelector('.login-container'), // Will be kept hidden
         editorContainer: document.querySelector('.editor-container'),
         titleInput: document.getElementById('blog-title'),
+        descriptionInput: document.getElementById('blog-description'),
+        tagsInput: document.getElementById('blog-tags'),
         contentTextarea: document.getElementById('blog-content'),
         previewPane: document.getElementById('preview-pane'),
         previewPaneContainer: document.getElementById('preview-pane-container'), 
@@ -87,9 +89,12 @@ function initMarkdownPreview() {
 
 // 更新Markdown预览
 function updatePreview() {
-    const markdown = elements.contentTextarea.value;
+    const title = elements.titleInput.value.trim();
+    const description = elements.descriptionInput.value.trim();
+    const tags = elements.tagsInput.value.trim();
+    const content = elements.contentTextarea.value.trim();
 
-    if (markdown.trim() === '') {
+    if (content.trim() === '') {
         elements.previewPane.innerHTML = `<div class="markdown-content">
             <p>预览将显示在这里...</p>
         </div>`;
@@ -102,8 +107,19 @@ function updatePreview() {
         elements.previewPane.innerHTML = `<div class="markdown-content"><p style="color: red;">错误：Markdown预览功能不可用，marked.js 未加载。</p></div>`;
         return;
     }
-    const html = marked.parse(markdown);
+    // 生成完整的front matter预览
+    const tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+    const tagsStr = JSON.stringify(tagsArray);
+    
+    const frontMatter = `---
+title: "${title || '未设置标题'}"
+date: "${new Date().toISOString()}"
+description: "${description || '未设置描述'}"
+tags: ${tagsStr || '[]'}
+layout: post
+---`;
 
+    const html = marked.parse(`${frontMatter}\n\n${content}`);
     elements.previewPane.innerHTML = `<div class="markdown-content">${html}</div>`;
 }
 
@@ -143,11 +159,13 @@ function showEditor() {
 // 发布博客文章
 async function publishBlog() {
     const title = elements.titleInput.value.trim();
+    const description = elements.descriptionInput.value.trim();
+    const tags = elements.tagsInput.value.trim();
     const content = elements.contentTextarea.value.trim();
     let token = localStorage.getItem('github_token');
 
-    if (!title || !content) {
-        displaySubmitStatus('标题和内容不能为空', 'error');
+    if (!title || !description || !tags || !content) {
+        displaySubmitStatus('标题、描述、标签和内容不能为空', 'error');
         return;
     }
 
@@ -179,9 +197,15 @@ async function publishBlog() {
         const fileName = `${dateString}-${safeTitle}.md`;
 
         // 创建Markdown文件内容，包含元信息 (Front Matter)
+        // 处理标签为数组格式
+        const tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+        const tagsStr = JSON.stringify(tagsArray);
+
         const fileContent = `---
 title: "${title}"
 date: ${date.toISOString()}
+description: "${description}"
+tags: ${tagsStr}
 layout: post
 ---
 
