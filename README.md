@@ -1,6 +1,8 @@
 # Tianjinsa博客
 
-这是一个基于Node.js构建的纯静态博客系统，使用Markdown编写文章，最终部署到GitHub Pages。文章的编写可以通过在线编辑器完成。
+这是一个基于Node.js构建的纯静态博客       *   点击"发布博客"按钮。文章将以 `YYYY-MM-DD-标题.md` 的格式保存到仓库的 `_posts/` 目录下。*   填写文章标题、描述、标签（逗号分隔）和Markdown内容。
+    *   点击"发布博客"按钮。文章将以 `YYYY-MM-DD-标题.md` 的格式保存到仓库的 `_posts/` 目录下。
+3.  **重要提示:** 使用在线编辑器保存文章后，你需要执行构建步骤并将更改推送到GitHub Pages才能使文章在网站上可见。参考下面的"生成静态文件"和"部署"部分。使用Markdown编写文章，最终部署到GitHub Pages。文章的编写可以通过在线编辑器完成。
 
 ## 功能特点
 
@@ -46,7 +48,7 @@ npm install
 npm run build
 ```
 
-此命令会处理 `blog/_posts/` 目录下的Markdown源文件，并生成整个静态站点。具体包括：`posts/` 目录下的单个文章HTML文件，根目录下的静态 `index.html`、`archives.html` 和 `tags.html`，以及 `sitemap.xml` 和 `rss.xml`。
+此命令会处理 `_posts/` 目录下的Markdown源文件，并生成整个静态站点。具体包括：`posts/` 目录下的单个文章HTML文件，根目录下的静态 `index.html`、`archives.html` 和 `tags.html`，以及 `sitemap.xml` 和 `rss.xml`。
 
 ### 本地预览
 
@@ -60,7 +62,7 @@ npm run dev
 
 ```plaintext
 .
-├── blog/_posts/          # 存放Markdown博客文章
+├── _posts/                # 存放Markdown博客文章
 ├── posts/                # 生成的HTML博客文章
 ├── js/
 │   └── read-count.js     # 本地阅读计数功能
@@ -146,7 +148,7 @@ tags: ["标签1", "标签2"] # 标签列表
 部署此博客到 GitHub Pages 通常涉及以下步骤：
 
 1.  **编写/编辑文章:**
-    *   使用 `blog-editor.html` (如上所述) 创建或修改文章。编辑器会将Markdown文件保存到你的GitHub仓库的 `blog/_posts/` 目录中（例如，`main` 分支）。
+    *   使用 `blog-editor.html` (如上所述) 创建或修改文章。编辑器会将Markdown文件保存到你的GitHub仓库的 `_posts/` 目录中（例如，`main` 分支）。
 
 2.  **构建静态站点:**
     *   将仓库的最新更改拉取到本地。
@@ -155,7 +157,7 @@ tags: ["标签1", "标签2"] # 标签列表
 3.  **推送更改到GitHub Pages:**
     *   GitHub Pages可以从特定分支（如 `gh-pages`）或主分支的 `docs/` 目录提供服务。
     *   **选项 A (推荐: `gh-pages` 分支):**
-        *   将所有构建后的文件 (包括 `index.html`, `posts/`, `archives.html`, `tags.html`, `sitemap.xml`, `rss.xml`, `styles.css`, `js/`, `assets/` 等，但不包括 `node_modules` 或源Markdown文件 `blog/_posts` 除非你有意也将其部署) 提交到一个名为 `gh-pages` 的分支。
+        *   将所有构建后的文件 (包括 `index.html`, `posts/`, `archives.html`, `tags.html`, `sitemap.xml`, `rss.xml`, `styles.css`, `js/`, `assets/` 等，但不包括 `node_modules` 或源Markdown文件 `_posts` 除非你有意也将其部署) 提交到一个名为 `gh-pages` 的分支。
         *   确保你的仓库设置为从 `gh-pages` 分支提供GitHub Pages服务。
     *   **选项 B (`docs/` 目录):**
         *   将所有构建后的文件复制到主分支（或你选择的默认分支）下的 `docs/` 目录中。
@@ -163,7 +165,7 @@ tags: ["标签1", "标签2"] # 标签列表
         *   确保你的仓库设置为从主分支的 `docs/` 目录提供GitHub Pages服务。
 
 4.  **(可选) 使用 GitHub Actions 自动化:**
-    *   为了简化部署流程，你可以设置一个 GitHub Action。这个 Action 可以在你推送到 `main` 分支的 `blog/_posts/` 目录时自动运行 `npm run build`，然后将生成的文件部署到你的 `gh-pages` 分支或 `docs/` 目录。这是推荐的高级设置。
+    *   为了简化部署流程，你可以设置一个 GitHub Action。这个 Action 可以在你推送到 `main` 分支的 `_posts/` 目录时自动运行 `npm run build`，然后将生成的文件部署到你的 `gh-pages` 分支或 `docs/` 目录。这是推荐的高级设置。
 
 确保你的 CNAME 文件（如果使用自定义域名）位于你用于部署的分支的根目录（或 `docs/` 目录的根，取决于你的设置）。
 

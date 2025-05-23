@@ -6,7 +6,7 @@ const path = require('path');
 const matter = require('gray-matter'); // For parsing frontmatter
 
 // Define directories and files
-const POSTS_DIR = path.join(__dirname, 'blog', '_posts');
+const POSTS_DIR = path.join(__dirname, '_posts');
 const POST_OUTPUT_DIR_RELATIVE_TO_ROOT = 'posts'; // Used for generating post URLs
 const OUTPUT_FILE = path.join(__dirname, 'tags.html');
 

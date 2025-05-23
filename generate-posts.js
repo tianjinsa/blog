@@ -7,7 +7,7 @@ const marked = require('marked');
 const matter = require('gray-matter');
 
 // 定义目录
-const POSTS_DIR = path.join(__dirname, 'blog', '_posts'); // Updated POSTS_DIR
+const POSTS_DIR = path.join(__dirname, '_posts'); // Updated POSTS_DIR
 const OUTPUT_DIR = path.join(__dirname, 'posts');
 const TEMPLATE_PATH = path.join(__dirname, 'template.html');
 

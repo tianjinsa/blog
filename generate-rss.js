@@ -8,7 +8,7 @@ const marked = require('marked'); // For converting Markdown to HTML
 
 // Define constants
 const SITE_URL = 'https://blog.tianjinsa.top';
-const POSTS_DIR = path.join(__dirname, 'blog', '_posts'); // Source of Markdown posts
+const POSTS_DIR = path.join(__dirname, '_posts'); // Source of Markdown posts
 const OUTPUT_FILE = path.join(__dirname, 'rss.xml');
 const MAX_RSS_ITEMS = 20; // Max number of posts in the RSS feed
 

@@ -3,7 +3,7 @@ const CONFIG = {
     HASH_ITERATIONS: 1000,       // 哈希迭代次数
     GITHUB_REPO_OWNER: 'tianjinsa', // 替换为你的 GitHub 用户名
     GITHUB_REPO_NAME: 'blog',  // 替换为你的仓库名
-    BLOG_PATH: 'blog/',          // 博客文件存储路径
+    BLOG_PATH: '',               // 博客文件存储路径
     PASSWORD_HASH: '2297df0c72a87f029517c0f127ed499e5e086d45cf4793d4e8767a99c39e1690' // 密码的SHA-256哈希
 };
 

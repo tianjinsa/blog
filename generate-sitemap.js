@@ -8,7 +8,7 @@ const path = require('path');
 const SITE_URL = 'https://blog.tianjinsa.top'; // Updated SITE_URL
 const BLOG_BASE = ''; // Updated BLOG_BASE - leading slash will be in URL construction
 
-const SOURCE_POSTS_DIR = path.join(__dirname, 'blog', '_posts'); // Path to original markdown posts
+const SOURCE_POSTS_DIR = path.join(__dirname, '_posts'); // Path to original markdown posts
 
 // 定义生成站点地图的函数
 function generateSitemap() {

@@ -9,7 +9,7 @@ const matter = require('gray-matter');
 // Define directories and files
 const SITE_URL = 'https://blog.tianjinsa.top'; // Site URL for meta tags
 const POSTS_PER_PAGE = 5; // Configuration for pagination
-const POSTS_DIR = path.join(__dirname, 'blog', '_posts');
+const POSTS_DIR = path.join(__dirname, '_posts');
 // OUTPUT_FILE will be determined in the main loop for each page, no longer a single const
 
 // Ensure blog posts directory exists
