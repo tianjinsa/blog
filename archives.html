@@ -144,7 +144,7 @@
             }
             
             const repoOwner = 'tianjinsa';
-            const repoName = 'tianjinsa.github.io';
+            const repoName = 'blog';
             const blogPath = '_posts';
             
             // 从GitHub获取博客文件列表
@@ -158,11 +158,10 @@
                 .then(files => {
                     // 过滤出.md文件并按日期排序
                     const blogFiles = files
-                        .filter(file => file.name.endsWith('.md'))
-                        .sort((a, b) => {
-                            // 假设文件名格式为: YYYY-MM-DD-title.md
-                            const dateA = a.name.substring(0, 10);
-                            const dateB = b.name.substring(0, 10);
+                        .filter(file => file.name.endsWith('.md'))                        .sort((a, b) => {
+                            // 假设文件名格式为: YYYY-MM-DD-hh-mm-ss-title.md
+                            const dateA = a.name.substring(0, 19);
+                            const dateB = b.name.substring(0, 19);
                             return dateB.localeCompare(dateA); // 降序排列
                         });
                     
@@ -184,9 +183,8 @@
                             .then(response => response.text())
                             .then(content => {
                                 // 解析frontmatter和内容
-                                const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n/);
-                                let title = file.name.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace('.md', '');
-                                const dateStr = file.name.substring(0, 10);
+                                const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n/);                                let title = file.name.replace(/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-/, '').replace('.md', '');
+                                const dateStr = file.name.substring(0, 19);
                                 let tags = [];
                                 
                                 if (frontmatterMatch) {

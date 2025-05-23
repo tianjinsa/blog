@@ -19,6 +19,11 @@
 - 📝 在线博客编辑器，直接保存到GitHub仓库
 - 📄 RSS Feed (`rss.xml`)
 - 💬 通过Utterances支持评论 (基于GitHub Issues)
+- ⚙️ 集中化配置系统，便于管理和扩展
+
+## 配置系统
+
+本博客使用集中化的配置文件管理所有设置。配置文件位于 `js/config.js`。查看 [配置说明文档](CONFIG.md) 了解详情。
 
 ## 快速开始
 

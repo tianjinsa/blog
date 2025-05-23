@@ -6,15 +6,18 @@ const path = require('path');
 const matter = require('gray-matter'); // For parsing frontmatter
 const marked = require('marked'); // For converting Markdown to HTML
 
+// 导入全局配置
+const BLOG_CONFIG = require('./js/config.js');
+
 // Define constants
-const SITE_URL = 'https://blog.tianjinsa.top';
-const POSTS_DIR = path.join(__dirname, '_posts'); // Source of Markdown posts
+const SITE_URL = BLOG_CONFIG.SITE_URL;
+const POSTS_DIR = path.join(__dirname, BLOG_CONFIG.BLOG_PATH); // Source of Markdown posts
 const OUTPUT_FILE = path.join(__dirname, 'rss.xml');
-const MAX_RSS_ITEMS = 20; // Max number of posts in the RSS feed
+const MAX_RSS_ITEMS = BLOG_CONFIG.MAX_RSS_ITEMS; // Max number of posts in the RSS feed
 
 // Blog metadata for the RSS channel
-const BLOG_TITLE = 'Tianjinsa的博客';
-const BLOG_DESCRIPTION = 'Tianjinsa的博客 - 分享技术文章和个人心得';
+const BLOG_TITLE = BLOG_CONFIG.SITE_TITLE;
+const BLOG_DESCRIPTION = BLOG_CONFIG.SITE_DESCRIPTION;
 
 // Ensure blog posts directory exists
 if (!fs.existsSync(POSTS_DIR)) {
@@ -58,7 +61,7 @@ function getPostData() {
 
         let title = data.title;
         if (!title) {
-            title = file.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+            title = file.replace(/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
             title = title.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
         }
 

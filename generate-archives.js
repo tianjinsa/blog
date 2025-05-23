@@ -5,9 +5,12 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter'); // For parsing frontmatter
 
+// 导入全局配置
+const BLOG_CONFIG = require('./js/config.js');
+
 // Define directories and files
-const POSTS_DIR = path.join(__dirname, '_posts');
-const POST_OUTPUT_DIR_RELATIVE_TO_ROOT = 'posts'; // Used for generating post URLs
+const POSTS_DIR = path.join(__dirname, BLOG_CONFIG.BLOG_PATH);
+const POST_OUTPUT_DIR_RELATIVE_TO_ROOT = BLOG_CONFIG.POST_OUTPUT_DIR; // Used for generating post URLs
 const OUTPUT_FILE = path.join(__dirname, 'archives.html');
 
 // Ensure blog posts directory exists
@@ -29,10 +32,9 @@ function getPostData() {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         const { data } = matter(fileContent); // Only need frontmatter for archives
 
-        // Title: from frontmatter or filename (parsed)
-        let title = data.title;
+        // Title: from frontmatter or filename (parsed)        let title = data.title;
         if (!title) {
-            title = file.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+            title = file.replace(/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
             title = title.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()); // Capitalize
         }
 

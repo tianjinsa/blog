@@ -4,11 +4,14 @@
 const fs = require('fs');
 const path = require('path');
 
+// 导入全局配置
+const BLOG_CONFIG = require('./js/config.js');
+
 // 网站URL
-const SITE_URL = 'https://blog.tianjinsa.top'; // Updated SITE_URL
+const SITE_URL = BLOG_CONFIG.SITE_URL; // 使用全局配置的网站URL
 const BLOG_BASE = ''; // Updated BLOG_BASE - leading slash will be in URL construction
 
-const SOURCE_POSTS_DIR = path.join(__dirname, '_posts'); // Path to original markdown posts
+const SOURCE_POSTS_DIR = path.join(__dirname, BLOG_CONFIG.BLOG_PATH); // Path to original markdown posts
 
 // 定义生成站点地图的函数
 function generateSitemap() {
@@ -50,7 +53,7 @@ function generateSitemap() {
         postHtmlFiles.forEach(htmlFile => {
             const baseName = path.basename(htmlFile, '.html');
             // Attempt to find the original Markdown file
-            // Common filename patterns: YYYY-MM-DD-title.md or title.md
+            // Common filename patterns: YYYY-MM-DD-hh-mm-ss-title.md or title.md
             // generate-posts.js uses the original .md filename to create the .html filename
             const originalMdFilename = `${baseName}.md`;
             const sourceMdPath = path.join(SOURCE_POSTS_DIR, originalMdFilename);

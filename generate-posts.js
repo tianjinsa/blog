@@ -6,9 +6,12 @@ const path = require('path');
 const marked = require('marked');
 const matter = require('gray-matter');
 
+// 导入全局配置
+const BLOG_CONFIG = require('./js/config.js');
+
 // 定义目录
-const POSTS_DIR = path.join(__dirname, '_posts'); // Updated POSTS_DIR
-const OUTPUT_DIR = path.join(__dirname, 'posts');
+const POSTS_DIR = path.join(__dirname, BLOG_CONFIG.BLOG_PATH); // 使用全局配置的博客路径
+const OUTPUT_DIR = path.join(__dirname, BLOG_CONFIG.POST_OUTPUT_DIR);
 const TEMPLATE_PATH = path.join(__dirname, 'template.html');
 
 // 确保输出目录存在
@@ -47,9 +50,8 @@ blogFiles.forEach(file => {
     
     // 解析 front matter
     const { data, content } = matter(fileContent);
-    
-    // 处理日期
-    let date = file.substring(0, 10); // 从文件名获取日期
+      // 处理日期
+    let date = file.substring(0, 19); // 从文件名获取日期
     if (data.date) {
         const dateObj = new Date(data.date);
         date = dateObj.toLocaleDateString('zh-CN', {
@@ -58,9 +60,8 @@ blogFiles.forEach(file => {
             day: 'numeric'
         });
     }
-    
-    // 处理标题
-    const title = data.title || file.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace('.md', '');
+      // 处理标题
+    const title = data.title || file.replace(/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-/, '').replace('.md', '');
     
     // 处理标签
     const tags = data.tags || [];

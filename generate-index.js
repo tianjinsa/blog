@@ -6,10 +6,13 @@ const path = require('path');
 const marked = require('marked'); // For potential excerpt processing, though not explicitly used for cards in current index.html
 const matter = require('gray-matter');
 
+// 导入全局配置
+const BLOG_CONFIG = require('./js/config.js');
+
 // Define directories and files
-const SITE_URL = 'https://blog.tianjinsa.top'; // Site URL for meta tags
-const POSTS_PER_PAGE = 5; // Configuration for pagination
-const POSTS_DIR = path.join(__dirname, '_posts');
+const SITE_URL = BLOG_CONFIG.SITE_URL; // Site URL for meta tags
+const POSTS_PER_PAGE = BLOG_CONFIG.POSTS_PER_PAGE; // Configuration for pagination
+const POSTS_DIR = path.join(__dirname, BLOG_CONFIG.BLOG_PATH);
 // OUTPUT_FILE will be determined in the main loop for each page, no longer a single const
 
 // Ensure blog posts directory exists
@@ -53,10 +56,9 @@ function getPostData() {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         const { data, content } = matter(fileContent);
 
-        // Title: from frontmatter or filename (parsed)
-        let title = data.title;
+        // Title: from frontmatter or filename (parsed)        let title = data.title;
         if (!title) {
-            title = file.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+            title = file.replace(/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
             title = title.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()); // Capitalize
         }
 

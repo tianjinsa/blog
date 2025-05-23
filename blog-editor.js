@@ -1,10 +1,9 @@
-// 安全配置
-const CONFIG = {
-    HASH_ITERATIONS: 1000,       // 哈希迭代次数
-    GITHUB_REPO_OWNER: 'tianjinsa', // 替换为你的 GitHub 用户名
-    GITHUB_REPO_NAME: 'blog',  // 替换为你的仓库名
-    BLOG_PATH: '_posts',               // 博客文件存储路径
-    PASSWORD_HASH: '2297df0c72a87f029517c0f127ed499e5e086d45cf4793d4e8767a99c39e1690' // 密码的SHA-256哈希
+// 使用全局配置
+// 确保在HTML文件中已引入js/config.js
+const CONFIG = window.BLOG_CONFIG || {
+    GITHUB_REPO_OWNER: 'tianjinsa', // 默认值
+    GITHUB_REPO_NAME: 'blog',
+    BLOG_PATH: '_posts'
 };
 
 // DOM 元素
@@ -188,10 +187,9 @@ async function publishBlog() {
     elements.publishButton.textContent = '发布中...';
     displaySubmitStatus('正在准备发布...', 'info');
 
-    try {
-        // 生成文件名 (基于标题和日期)
+    try {        // 生成文件名 (基于标题和日期)
         const date = new Date();
-        const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}-${String(date.getHours()).padStart(2, '0')}-${String(date.getMinutes()).padStart(2, '0')}-${String(date.getSeconds()).padStart(2, '0')}`;
         // 移除非法字符，并将空格替换为连字符
         const safeTitle = title.replace(/[\\/:*?"<>|\s]/g, '-').toLowerCase();
         const fileName = `${dateString}-${safeTitle}.md`;
@@ -265,7 +263,7 @@ async function getGithubFile(filePath, token) {
         method: 'GET',
         headers: {
             'Authorization': `token ${token}`,
-            'Accept': 'application/vnd.github.v3+json'
+            'Accept': `application/vnd.github.${CONFIG.API_VERSION || 'v3'}+json`
         }
     });
 
@@ -288,18 +286,16 @@ async function uploadToGithub(filePath, content, token, sha) {
     const body = {
         message: `博客文章: ${elements.titleInput.value.trim()}`, // 提交信息
         content: btoa(unescape(encodeURIComponent(content))), // Base64编码，并处理UTF-8字符
-        branch: 'main' // 或者你的默认分支
+        branch: CONFIG.DEFAULT_BRANCH || 'main' // 使用配置中的默认分支
     };
 
     if (sha) {
         body.sha = sha; // 如果是更新操作，需要提供文件的SHA
-    }
-
-    const response = await fetch(url, {
+    }    const response = await fetch(url, {
         method: 'PUT',
         headers: {
             'Authorization': `token ${token}`,
-            'Accept': 'application/vnd.github.v3+json',
+            'Accept': `application/vnd.github.${CONFIG.API_VERSION || 'v3'}+json`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(body)
