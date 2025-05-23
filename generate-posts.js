@@ -7,13 +7,19 @@ const marked = require('marked');
 const matter = require('gray-matter');
 
 // 定义目录
-const POSTS_DIR = path.join(__dirname, '_posts');
+const POSTS_DIR = path.join(__dirname, 'blog', '_posts'); // Updated POSTS_DIR
 const OUTPUT_DIR = path.join(__dirname, 'posts');
 const TEMPLATE_PATH = path.join(__dirname, 'template.html');
 
 // 确保输出目录存在
 if (!fs.existsSync(OUTPUT_DIR)) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+}
+
+// 确保博客文章目录存在
+if (!fs.existsSync(POSTS_DIR)) {
+    console.error(`Error: Blog posts directory not found at ${POSTS_DIR}`);
+    process.exit(1); // Exit if the directory doesn't exist
 }
 
 // 读取模板文件

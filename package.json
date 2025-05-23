@@ -4,9 +4,8 @@
   "description": "Tianjinsa的个人博客",
   "main": "generate-posts.js",
   "scripts": {
-    "build": "node generate-posts.js && node generate-sitemap.js",
+    "build": "node generate-posts.js && node generate-index.js && node generate-archives.js && node generate-tags.js && node generate-sitemap.js && node generate-rss.js",
     "dev": "http-server -p 8080 -c-1",
-    "create": "node create-post.js",
     "sitemap": "node generate-sitemap.js"
   },
   "keywords": [
