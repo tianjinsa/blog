@@ -4,30 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Tianjinsa的博客文章">
-    <meta name="keywords" content="Tianjinsa, 博客, 技术分享">
-    <meta name="author" content="Tianjinsa">
+    <meta name="keywords" content="Tianjinsa, 博客, 技术分享">    <meta name="author" content="Tianjinsa">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
     <title>正在加载... - Tianjinsa的博客</title>
     <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./post-enhancements.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="alternate" type="application/rss+xml" title="Tianjinsa的博客 RSS Feed" href="./rss.xml">
-      <!-- 加载配置和工具 -->
-    <script src="./js/config.js"></script>
+    <link rel="alternate" type="application/rss+xml" title="Tianjinsa的博客 RSS Feed" href="./rss.xml">    <!-- 加载配置和工具 -->    <script src="./js/config.js"></script>
     <script src="./js/github-api.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- 使用指定版本的marked.js，确保兼容性 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     <script>
-        // 配置marked.js
-        document.addEventListener('DOMContentLoaded', function() {
-            marked.setOptions({
-                gfm: true, // 启用 GitHub 风格的 Markdown
-                breaks: true, // 允许回车换行
-                headerIds: true, // 为标题添加 id 属性
-                mangle: false, // 不对邮箱地址进行编码
-                smartypants: false // 不进行标点符号的智能替换
-            });
+        // 配置marked选项
+        marked.setOptions({
+            gfm: true, // 启用 GitHub 风格的 Markdown
+            breaks: true, // 允许回车换行
+            headerIds: true, // 为标题添加 id 属性
+            mangle: false, // 不对邮箱地址进行编码
+            smartypants: false, // 不进行标点符号的智能替换
+            xhtml: true, // 使用xhtml闭合标签
+            // 不使用自定义渲染器，使用默认渲染以便正确处理HTML标签和代码高亮
         });
+
+        // 安全的Markdown解析函数，供页面中使用
+        window.safeMarkdownParse = function(markdownText) {
+            if (typeof markdownText !== 'string') {
+                console.warn('Markdown内容不是字符串类型，尝试转换');
+                markdownText = String(markdownText || '');
+            }
+            
+            try {
+                // 使用官方marked解析Markdown
+                return marked.parse(markdownText.trim());
+            } catch (error) {
+                console.error('Markdown解析出错:', error);
+                return `<div class="markdown-error">
+                    <p>Markdown解析错误: ${error.message}</p>
+                    <p>请联系管理员修复此问题。</p>
+                </div>`;
+            }
+        };
     </script>
 </head>
 <body>
@@ -43,13 +61,25 @@
         <div class="navbar-toggle" id="navbar-toggle">
             <i class="bi bi-list"></i>
         </div>
-    </nav>
-
-    <div class="container">
+    </nav>    <div class="container">
         <div class="content-wrapper">
             <div id="article-container">
                 <div class="loading">
                     <p>正在加载文章内容...</p>
+                </div>
+            </div>
+            
+            <!-- 文章大纲导航 -->
+            <div id="article-outline" class="article-outline">
+                <div class="outline-header">
+                    <h3><i class="bi bi-list-nested"></i> 文章大纲</h3>
+                    <button id="toggle-outline" class="toggle-outline-button" title="展开/折叠大纲">
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="outline-container" class="outline-container">
+                    <!-- 大纲将通过JavaScript动态添加 -->
+                    <div class="outline-placeholder">加载大纲...</div>
                 </div>
             </div>
         </div>
@@ -151,14 +181,32 @@
                 const tags = data.tags || [];
                 const tagsHTML = tags.length > 0 
                     ? tags.map(tag => `<span class="tag"><i class="bi bi-tag"></i> ${tag}</span>`).join(' ')
-                    : '';                // 转换Markdown为HTML
-                const htmlContent = marked.parse(markdownContent.trim());
-                
-                // 更新页面内容
+                    : '';                // 使用安全的Markdown解析函数
+                let htmlContent = '';
+                try {
+                    // 检查是否存在安全解析函数
+                    if (typeof window.safeMarkdownParse === 'function') {
+                        htmlContent = window.safeMarkdownParse(markdownContent);
+                    } else {
+                        // 降级方案
+                        console.warn('使用降级的Markdown解析方法');
+                        if (typeof markdownContent !== 'string') {
+                            markdownContent = String(markdownContent || '');
+                        }
+                        htmlContent = marked.parse(markdownContent.trim());
+                    }
+                } catch (e) {
+                    console.error('Markdown解析失败:', e);
+                    htmlContent = `<div class="markdown-error">
+                        <p>Markdown 解析错误: ${e.message}</p>
+                        <p>请联系管理员修复此问题。</p>
+                    </div>`;
+                }
+                  // 更新页面内容
                 document.getElementById('article-container').innerHTML = `
                     <article class="blog-post">
                         <header class="blog-post-header">
-                            <h1 class="blog-post-title">${title}</h1>
+                            <h1 class="blog-post-title" id="article-title">${title}</h1>
                             <div class="blog-post-meta">
                                 <span><i class="bi bi-calendar"></i> ${displayDate}</span>
                                 <div class="blog-tags">${tagsHTML}</div>
@@ -174,6 +222,15 @@
                 if (window.Prism) {
                     Prism.highlightAll();
                 }
+                
+                // 添加代码块复制按钮
+                addCodeBlockCopyButtons();
+                
+                // 生成文章大纲
+                generateArticleOutline();
+                
+                // 处理大纲折叠/展开
+                setupOutlineToggle();
                 
             } catch (error) {
                 console.error('加载文章出错:', error);
@@ -260,11 +317,281 @@
                     result.data[key] = value;
                 }
             });
-            
-            // 提取实际内容
+              // 提取实际内容
             result.content = content.substring(endIndex + 3).trim();
             
             return result;
+        }
+        
+        /**
+         * 为代码块添加复制按钮
+         */
+        function addCodeBlockCopyButtons() {
+            const codeBlocks = document.querySelectorAll('pre > code');
+            
+            codeBlocks.forEach((codeBlock, index) => {
+                // 创建代码块包装容器
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-block-wrapper';
+                
+                // 获取代码块的语言类名
+                const codeClass = Array.from(codeBlock.classList)
+                    .find(cls => cls.startsWith('language-'));
+                const language = codeClass ? codeClass.replace('language-', '') : '代码';
+                
+                // 添加语言标签
+                const languageTag = document.createElement('div');
+                languageTag.className = 'code-language-tag';
+                languageTag.textContent = language;
+                
+                // 创建复制按钮
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-code-button';
+                copyButton.setAttribute('aria-label', '复制代码');
+                copyButton.innerHTML = '<i class="bi bi-clipboard"></i>';
+                copyButton.dataset.copyId = `code-block-${index}`;
+                
+                // 将原始代码块的父元素(pre)替换为新的包装容器
+                const pre = codeBlock.parentElement;
+                pre.parentElement.insertBefore(wrapper, pre);
+                wrapper.appendChild(languageTag);
+                wrapper.appendChild(pre);
+                wrapper.appendChild(copyButton);
+                
+                // 添加复制功能
+                copyButton.addEventListener('click', () => {
+                    // 获取纯文本内容
+                    const textToCopy = codeBlock.textContent;
+                    
+                    // 使用 Clipboard API 复制文本
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(() => {
+                            // 复制成功，改变按钮状态
+                            copyButton.innerHTML = '<i class="bi bi-check2"></i>';
+                            copyButton.classList.add('copied');
+                            
+                            // 2秒后恢复按钮状态
+                            setTimeout(() => {
+                                copyButton.innerHTML = '<i class="bi bi-clipboard"></i>';
+                                copyButton.classList.remove('copied');
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            console.error('复制失败:', err);
+                            copyButton.innerHTML = '<i class="bi bi-exclamation-triangle"></i>';
+                            
+                            setTimeout(() => {
+                                copyButton.innerHTML = '<i class="bi bi-clipboard"></i>';
+                            }, 2000);
+                        });
+                });
+            });
+        }
+        
+        /**
+         * 生成文章大纲
+         */
+        function generateArticleOutline() {
+            const article = document.querySelector('.blog-post-content');
+            const outlineContainer = document.getElementById('outline-container');
+            
+            if (!article || !outlineContainer) return;
+            
+            // 获取所有标题元素
+            const headings = article.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            
+            if (headings.length === 0) {
+                outlineContainer.innerHTML = '<div class="no-outline">无大纲内容</div>';
+                // 如果没有标题，隐藏大纲区
+                document.getElementById('article-outline').classList.add('no-headings');
+                return;
+            }
+            
+            // 为每个标题添加ID（如果没有）
+            headings.forEach((heading, index) => {
+                if (!heading.id) {
+                    // 从标题文本生成ID
+                    const headingText = heading.textContent.trim();
+                    const headingId = `heading-${index}-${headingText.replace(/[^\w\u4e00-\u9fa5]+/g, '-').toLowerCase()}`;
+                    heading.id = headingId;
+                }
+            });
+            
+            // 构建大纲HTML
+            let outlineHTML = '<ul class="outline-list">';
+            let previousLevel = 0;
+            let levelDiff = 0;
+            
+            headings.forEach((heading) => {
+                // 获取标题层级（1-6）
+                const level = parseInt(heading.tagName.substring(1));
+                
+                // 处理嵌套层级
+                if (previousLevel === 0) {
+                    // 第一个标题
+                    previousLevel = level;
+                } else {
+                    levelDiff = level - previousLevel;
+                    
+                    if (levelDiff > 0) {
+                        // 打开新的嵌套列表
+                        for (let i = 0; i < levelDiff; i++) {
+                            outlineHTML += '<ul class="outline-sublist">';
+                        }
+                    } else if (levelDiff < 0) {
+                        // 关闭嵌套列表
+                        for (let i = 0; i > levelDiff; i--) {
+                            outlineHTML += '</ul></li>';
+                        }
+                    } else {
+                        // 同级别，关闭前一个li
+                        outlineHTML += '</li>';
+                    }
+                    
+                    previousLevel = level;
+                }
+                
+                // 添加大纲项
+                const headingText = heading.textContent.trim();
+                outlineHTML += `
+                    <li class="outline-item level-${level}">
+                        <a href="#${heading.id}" class="outline-link">${headingText}</a>
+                `;
+            });
+            
+            // 关闭所有开放的标签
+            for (let i = 0; i < previousLevel; i++) {
+                outlineHTML += '</li></ul>';
+            }
+            
+            // 更新大纲容器
+            outlineContainer.innerHTML = outlineHTML;
+            
+            // 添加点击事件，滚动到对应标题位置
+            const outlineLinks = outlineContainer.querySelectorAll('.outline-link');
+            outlineLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        // 平滑滚动到标题位置
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        
+                        // 高亮标题（可选）
+                        targetElement.classList.add('highlight-heading');
+                        setTimeout(() => targetElement.classList.remove('highlight-heading'), 2000);
+                        
+                        // 在小屏幕上自动关闭大纲
+                        if (window.innerWidth < 768) {
+                            document.getElementById('article-outline').classList.remove('outline-active');
+                        }
+                    }
+                });
+            });
+            
+            // 在滚动时高亮当前可见的标题
+            setupScrollHighlight(headings);
+        }
+        
+        /**
+         * 设置大纲折叠/展开功能
+         */
+        function setupOutlineToggle() {
+            const toggleButton = document.getElementById('toggle-outline');
+            const outlineElement = document.getElementById('article-outline');
+            const outlineContainer = document.getElementById('outline-container');
+            
+            if (toggleButton && outlineElement) {
+                // 小屏幕默认折叠，大屏幕默认展开
+                if (window.innerWidth < 768) {
+                    outlineElement.classList.remove('outline-active');
+                } else {
+                    outlineElement.classList.add('outline-active');
+                }
+                
+                toggleButton.addEventListener('click', () => {
+                    outlineElement.classList.toggle('outline-active');
+                    
+                    // 更新按钮图标
+                    const iconElement = toggleButton.querySelector('i');
+                    if (outlineElement.classList.contains('outline-active')) {
+                        iconElement.className = 'bi bi-chevron-up';
+                    } else {
+                        iconElement.className = 'bi bi-chevron-down';
+                    }
+                });
+            }
+        }
+        
+        /**
+         * 设置滚动时大纲高亮
+         */
+        function setupScrollHighlight(headings) {
+            if (headings.length === 0) return;
+            
+            // 防抖函数
+            function debounce(fn, delay) {
+                let timer = null;
+                return function() {
+                    const context = this;
+                    const args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function() {
+                        fn.apply(context, args);
+                    }, delay);
+                };
+            }
+            
+            // 高亮函数
+            const highlightCurrentHeading = debounce(() => {
+                // 获取所有标题位置
+                const headingPositions = Array.from(headings).map(heading => {
+                    return {
+                        id: heading.id,
+                        top: heading.getBoundingClientRect().top
+                    };
+                });
+                
+                // 找到当前可见的标题（离顶部最近但不超过顶部）
+                let currentHeading = null;
+                const offset = 100; // 偏移量，可以调整
+                
+                for (const heading of headingPositions) {
+                    if (heading.top <= offset) {
+                        currentHeading = heading;
+                    } else {
+                        break;
+                    }
+                }
+                
+                // 如果没有找到可见标题，使用第一个标题（如果它在视口下方）
+                if (!currentHeading && headingPositions[0].top > offset) {
+                    currentHeading = headingPositions[0];
+                }
+                
+                // 移除所有高亮
+                const outlineLinks = document.querySelectorAll('.outline-link');
+                outlineLinks.forEach(link => link.classList.remove('active'));
+                
+                // 添加高亮到当前标题
+                if (currentHeading) {
+                    const activeLink = document.querySelector(`.outline-link[href="#${currentHeading.id}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                }
+            }, 100);
+            
+            // 监听滚动事件
+            window.addEventListener('scroll', highlightCurrentHeading);
+            
+            // 初次执行
+            highlightCurrentHeading();
         }
     </script>
 </body>

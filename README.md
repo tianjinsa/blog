@@ -101,8 +101,6 @@ npm run dev
 ├── blog-editor.html       # 博客编辑器(管理员使用)
 ├── blog-editor.css        # 博客编辑器样式
 ├── blog-editor.js         # 博客编辑器脚本
-├── generate-posts.js      # 将Markdown转换为HTML的脚本 (旧版)
-├── local-generate.js      # 本地生成脚本 (新版)
 ├── index.html             # 博客首页 (由本地生成)
 ├── package.json           # 项目配置
 ├── README.md              # 项目说明
