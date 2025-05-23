@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSS Feed - Tianjinsa的博客</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .filter-container input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .filter-container button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .filter-container button:hover {
+            background-color: #45a049;
+        }
+        .status {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .download-link {
+            display: none;
+            margin: 15px 0;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .download-link:hover {
+            background-color: #0056b3;
+        }
+        .preview-container {
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .preview-header {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
+        .preview-content {
+            padding: 10px;
+            max-height: 400px;
+            overflow: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+            background-color: #f8f9fa;
+            font-size: 14px;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>RSS Feed</h1>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="archives.html">归档</a>
+            <a href="tags.html">标签</a>
+            <a href="about.html">关于</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>RSS Feed生成器</h2>
+        <p>此工具可以为博客生成RSS Feed，并支持按关键词过滤文章。</p>
+        
+        <div class="filter-container">
+            <input type="text" id="filter-input" placeholder="输入关键词进行过滤...">
+            <button id="filter-button">应用过滤器</button>
+        </div>
+        
+        <div class="status" id="status">正在加载博客文章...</div>
+        
+        <a href="#" class="download-link" id="download-rss">下载RSS文件</a>
+        
+        <div class="preview-container">
+            <div class="preview-header">RSS预览</div>
+            <pre class="preview-content" id="rss-preview">加载中...</pre>
+        </div>
+    </div>
+
+    <!-- 引入依赖库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- 引入配置和工具 -->
+    <script src="js/config.js"></script>
+    <script src="js/github-api.js"></script>
+    
+    <!-- 引入客户端RSS生成器 -->
+    <script src="js/client-rss.js"></script>
+</body>
+</html>
