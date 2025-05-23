@@ -1,25 +1,14 @@
 /* 全局样式 */
 :root {
-    --primary-color: #87ceeb; /* Existing, kept */
-    --dark-bg: #1a1a1a; /* New */
-    --content-bg: #282828; /* New */
-    --input-bg: #333333; /* New */
-    --border-color: #444444; /* Existing, same value */
-    --text-color: #e0e0e0; /* Existing, same value */
-    --text-light: #b0b0b0; /* New */
-    --text-dark: #282828; /* New */
-    --red: #e74c3c; /* New */
-    --green: #2ecc71; /* New */
-    
-    /* Old variables, aliased or replaced if possible. For now, keep accent if used by navbar */
-    --accent-color: #87ceeb; /* Existing, used by navbar, kept */
-    --accent-color-rgb: 135, 206, 235; /* Existing, used by navbar, kept */
-    --header-height: 60px; /* Existing, used by navbar, kept */
-    
-    /* Renaming old variables to new ones if values are similar or identical */
-    --background-dark: var(--dark-bg); /* Alias */
-    --background-light: var(--content-bg); /* Alias */
-    --text-muted: var(--text-light); /* Alias */
+    --primary-color: #87ceeb;
+    --background-dark: #1a1a1a;
+    --background-light: #282828;
+    --text-color: #e0e0e0;
+    --text-muted: #b0b0b0;
+    --border-color: #444444;
+    --accent-color: #87ceeb;
+    --accent-color-rgb: 135, 206, 235;
+    --header-height: 60px;
 }
 
 * {
@@ -28,21 +17,17 @@
     padding: 0;
 }
 
-/* 基本样式，设置暗色背景和浅色文字 */
 body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--dark-bg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.7;
     color: var(--text-color);
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-    background-image: linear-gradient(45deg, #1a1a1a 25%, #222222 25%, #222222 50%, #1a1a1a 50%, #1a1a1a 75%, #222222 75%, #222222 100%);
+    background-color: var(--background-dark);
     background-size: 40px 40px;
     background-attachment: fixed;
 }
 
 a {
-    color: var(--primary-color); /* Updated to use new variable name, same color */
+    color: var(--accent-color);
     text-decoration: none;
     transition: color 0.3s;
 }
@@ -51,7 +36,7 @@ a:hover {
     color: #ffffff;
 }
 
-/* 导航栏 - STYLES MUST BE PRESERVED */
+/* 导航栏 */
 .navbar {
     background-color: rgba(22, 22, 22, 0.88);
     backdrop-filter: blur(5px);
@@ -84,7 +69,7 @@ a:hover {
 }
 
 .navbar-links a {
-    color: var(--text-light); /* Navbar uses text-muted which is aliased to text-light */
+    color: var(--text-muted);
     font-weight: 500;
     position: relative;
     padding: 5px 0;
@@ -117,29 +102,20 @@ a:hover {
 }
 
 /* 容器样式 */
-/* New .container styles replacing old ones */
 .container {
-    text-align: center;
-    padding: 40px;
-    background-color: var(--content-bg); /*略浅的背景，与body区分 */
-    border-radius: 12px; /* 圆角 */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* 增强阴影效果 */
-    max-width: 800px; /* 增加最大宽度 */
-    width: 90%; /* 响应式宽度 */
-    margin-left: auto; /* 左侧自动边距 */
-    margin-right: auto; /* 右侧自动边距 */
-    margin-top: 30px; /* 顶部边距 */
-    margin-bottom: 30px; /* 底部边距 */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .content-wrapper {
-    margin-top: calc(var(--header-height) + 40px); /* Keep this as it's related to fixed navbar */
+    margin-top: calc(var(--header-height) + 40px);
     margin-bottom: 50px;
 }
 
 /* 博客卡片样式 */
 .blog-card {
-    background-color: var(--content-bg); /* Updated to use new variable */
+    background-color: var(--background-light);
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 30px;
@@ -162,7 +138,7 @@ a:hover {
 }
 
 .blog-card-meta {
-    color: var(--text-light); /* Updated to use new variable */
+    color: var(--text-muted);
     font-size: 0.85em;
     margin-bottom: 15px;
     display: flex;
@@ -172,7 +148,7 @@ a:hover {
 }
 
 .blog-card-excerpt {
-    color: var(--text-light); /* Updated to use new variable */
+    color: var(--text-muted);
     margin-bottom: 20px;
 }
 
@@ -188,16 +164,16 @@ a:hover {
     padding: 4px 8px;
     margin-right: 6px;
     margin-bottom: 6px;
-    background-color: rgba(var(--accent-color-rgb), 0.1); /* Keep using accent-color-rgb for tags for now */
+    background-color: rgba(135, 206, 235, 0.1);
     border-radius: 30px;
     font-size: 0.75em;
-    color: var(--accent-color); /* Keep using accent-color for tags for now */
+    color: var(--accent-color);
     transition: background-color 0.3s;
 }
 
 .tag:hover {
     background-color: rgba(var(--accent-color-rgb), 0.25);
-    color: var(--accent-color); /* Keep using accent-color for tags for now */
+    color: var(--accent-color);
 }
 
 /* 搜索栏 */
@@ -211,7 +187,7 @@ a:hover {
     padding: 12px 50px 12px 20px;
     border-radius: 30px;
     border: none;
-    background-color: var(--input-bg); /* Updated to use new variable */
+    background-color: rgba(40, 40, 40, 0.8);
     color: white;
     font-size: 1em;
     transition: all 0.3s;
@@ -219,8 +195,8 @@ a:hover {
 
 .search-input:focus {
     outline: none;
-    background-color: #3a3a3a; /* Slightly lighter than input-bg for focus */
-    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.5); /* Keep using accent-color for shadow for now */
+    background-color: rgba(50, 50, 50, 0.8);
+    box-shadow: 0 0 0 2px rgba(135, 206, 235, 0.5);
 }
 
 .search-button {
@@ -230,7 +206,7 @@ a:hover {
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: var(--accent-color); /* Keep using accent-color for button for now */
+    color: var(--accent-color);
     font-size: 1.2em;
     cursor: pointer;
     transition: color 0.3s ease;
@@ -238,7 +214,7 @@ a:hover {
 
 /* 代码高亮 */
 pre {
-    background-color: var(--dark-bg); /* Updated to use new variable */
+    background-color: #1a1a1a;
     padding: 15px;
     border-radius: 5px;
     overflow-x: auto;
@@ -263,30 +239,18 @@ code {
     line-height: 1.8;
 }
 
-/* Global H1 style from new CSS */
-h1 {
-    color: var(--text-color); /* Was #ffffff */
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2.2em;
-    text-shadow: 0 2px 3px rgba(0,0,0,0.2);
-}
-
 .blog-content h1, 
 .blog-content h2, 
 .blog-content h3 {
-    color: white; /* This is fine, new global h1 also has white */
+    color: white;
 }
 
-/* Specific h1 style for blog content, ensure it doesn't conflict badly with global h1 */
 .blog-content h1 {
-    font-size: 2em; /* Slightly smaller than global h1, this is fine for specificity */
+    font-size: 2em;
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 12px;
-    margin-top: 30px; 
-    margin-bottom: 20px; /* Global H1 has 30px, this is fine */
-    text-align: left; /* Override global text-align: center for blog content h1 */
-    text-shadow: none; /* Override global text-shadow for blog content h1 */
+    margin-top: 30px; /* Keep original or adjust as needed */
+    margin-bottom: 20px;
 }
 
 .blog-content h2 {
@@ -301,18 +265,8 @@ h1 {
     margin-bottom: 15px;
 }
 
-/* Global P style from new CSS */
-p {
-    color: var(--text-light); /* Was #b0b0b0, already var(--text-light) which is fine */
-    margin-bottom: 25px;
-    font-size: 1.1em;
-}
-
 .blog-content p {
-    margin-bottom: 20px; /* Keep specific margin */
-    font-size: 1em; /* Explicitly define font-size for blog content <p> if different from global, or remove if global is fine */
-    line-height: 1.7; /* Keep specific line-height for blog content <p> */
-    color: var(--text-light); 
+    margin-bottom: 20px;
 }
 
 .blog-content img {
@@ -324,30 +278,29 @@ p {
 }
 
 .blog-content blockquote {
-    border-left: 3px solid var(--primary-color); /* Updated to use new variable */
+    border-left: 3px solid var(--accent-color);
     padding-left: 15px;
     margin: 20px 0;
-    color: var(--text-light); /* Updated to use new variable */
-    background-color: rgba(var(--accent-color-rgb), 0.05); /* Keep using accent-color-rgb for blockquote for now */
+    color: var(--text-muted);
+    background-color: rgba(var(--accent-color-rgb, 135, 206, 235), 0.05);
 }
 
-/* 页脚 - New styles replacing old ones */
+/* 页脚 */
 .footer {
-    margin-top: 30px;
-    font-size: 0.9em;
-    color: var(--text-light); /* Was #888888 */
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color); /* Already var(--border-color) */
-    text-align: center; 
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 50px;
+    background-color: rgba(26, 26, 26, 0.7);
+    color: var(--text-muted);
 }
 
 .footer a {
-    color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 /* 目录导航 */
 .table-of-contents {
-    background-color: var(--input-bg); /* Updated to use new variable */
+    background-color: rgba(40, 40, 40, 0.6);
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 30px;
@@ -358,7 +311,6 @@ p {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 15px;
-    color: var(--text-color); /* Ensure TOC headings use standard text color */
 }
 
 .table-of-contents ul {
@@ -406,199 +358,18 @@ p {
         display: block;
     }
     
-    /* .blog-header h1 specific style, keep it */
     .blog-header h1 {
-        font-size: 1.8em; 
-    }
-
-    /* New responsive styles from issue */
-    .container { /* Merged: old had no specific container changes at 768px, new one does */
-        padding: 30px 20px;
-    }
-
-    h1 { /* Merged: new global h1 style for this breakpoint */
-        font-size: 2em;
-    }
-
-    .project-links li { /* Add if .project-links are used */
-        width: 100%; /* 小屏幕下改为单列 */
+        font-size: 1.8em;
     }
 }
 
 @media (max-width: 480px) {
-    /* Existing styles at 480px */
-    .blog-title { /* This is likely a class for a specific H1 on the blog page, keep it */
+    .blog-title {
         font-size: 1.5em;
     }
     
-    .blog-container { /* This might be a specific container on blog page, keep it */
+    .blog-container {
         padding: 20px;
         margin: 30px 10px;
     }
 }
-
-/* New sections from the issue */
-
-/* 个人简介部分 */
-.profile-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 40px;
-}
-
-.avatar {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.avatar-placeholder {
-    width: 100%;
-    height: 100%;
-    background-color: var(--primary-color); /* Was #87ceeb, already var */
-    border-radius: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3em;
-    font-weight: bold;
-    color: var(--text-dark); /* Was #282828, already var */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.8s ease; 
-}
-
-.avatar:hover .avatar-placeholder {
-    transform: rotate(10deg) scale(1.05); 
-}
-
-.bio {
-    max-width: 90%;
-    line-height: 1.8; /* Matches .blog-content p */
-    color: var(--text-light); /* Added for consistency */
-}
-
-/* 技能展示部分 */
-.skills-section {
-    margin: 30px 0;
-}
-
-.skills-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.skill {
-    background-color: var(--input-bg); /* Was #333333 */
-    color: var(--text-color); /* Was #e0e0e0 */
-    padding: 10px 20px;
-    border-radius: 30px;
-    font-size: 1em;
-    border: 1px solid var(--border-color); /* Was #444444 */
-    transition: all 0.3s ease;
-}
-
-.skill:hover {
-    background-color: var(--border-color); /* Was #444444 */
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* 项目链接样式 */
-.project-links {
-    list-style: none; /* 移除列表标记 */
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-
-.project-links li {
-    margin-bottom: 20px; /* 列表项间距 */
-    width: calc(50% - 20px); /* 两列布局，有间距 */
-}
-
-/* 链接样式 */
-.project-links a {
-    display: block; 
-    color: var(--primary-color); /* Was #87ceeb */
-    text-decoration: none; 
-    font-size: 1.2em;
-    padding: 15px 20px;
-    border: 1px solid var(--border-color); /* Was #444444 */
-    border-radius: 8px; 
-    background-color: var(--input-bg); /* Was #333333 */
-    transition: all 0.3s ease; 
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* 链接悬停效果 */
-.project-links a:hover {
-    background-color: var(--border-color); /* Was #444444 */
-    color: var(--primary-color); /* Was #87ceeb */
-    transform: translateY(-5px); /* 上移效果 */
-    box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3); /* 增强阴影 */
-}
-
-/* 图标样式 */
-.icon {
-    margin-right: 10px;
-    font-style: normal;
-}
-
-/* 联系部分 */
-.contact-section {
-    margin: 40px 0 30px;
-    padding: 20px;
-    background-color: var(--input-bg); /* Was #333333 */
-    border-radius: 10px;
-}
-
-.social-links {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.social-link {
-    display: inline-flex;
-    align-items: center;
-    color: var(--text-color); /* Was #e0e0e0 */
-    background-color: var(--border-color); /* Was #444444 */
-    padding: 10px 20px;
-    border-radius: 30px;
-    font-size: 1em;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.social-link:hover {
-    background-color: var(--primary-color); /* Was #87ceeb */
-    color: var(--dark-bg); /* Was #1a1a1a */
-    transform: translateY(-3px);
-}
-
-/* 更新信息 */
-.update-info {
-    margin-top: 30px;
-    font-size: 0.9em;
-    color: var(--text-light); /* Was #777777 */
-}
-
-/* Animations */
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-/* Ensure .avatar-placeholder transition and .avatar:hover .avatar-placeholder styles are present as per new CSS */
-/* The styles for .avatar-placeholder and .avatar:hover .avatar-placeholder are already correctly placed above. */
