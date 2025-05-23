@@ -6,7 +6,7 @@ const path = require('path');
 const matter = require('gray-matter'); // For parsing frontmatter
 
 // 导入全局配置
-const BLOG_CONFIG = require('./js/config.js');
+const BLOG_CONFIG = require('../js/config.js');
 
 // Define directories and files
 const POSTS_DIR = path.join(__dirname, BLOG_CONFIG.BLOG_PATH);

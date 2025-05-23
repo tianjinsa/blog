@@ -7,7 +7,7 @@ const marked = require('marked'); // For potential excerpt processing, though no
 const matter = require('gray-matter');
 
 // 导入全局配置
-const BLOG_CONFIG = require('./js/config.js');
+const BLOG_CONFIG = require('../js/config.js');
 
 // Define directories and files
 const SITE_URL = BLOG_CONFIG.SITE_URL; // Site URL for meta tags

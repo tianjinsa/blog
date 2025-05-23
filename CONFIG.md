@@ -47,8 +47,5 @@
 
 - blog-editor.js：博客编辑器
 - generate-posts.js：生成博客文章 HTML 页面
-- generate-index.js：生成首页
-- generate-archives.js：生成归档页面
-- generate-tags.js：生成标签页面
 - generate-rss.js：生成 RSS Feed
 - generate-sitemap.js：生成网站地图

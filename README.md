@@ -73,24 +73,21 @@ npm run dev
 │   └── read-count.js     # 本地阅读计数功能
 ├── assets/               # (可选) 存放图片等静态资源
 ├── about.html            # 关于页面
-├── archives.html         # 归档页面
+├── archives.html         # 归档页面 (用户调用github api在用户机器上自动生成内容)
 ├── blog-editor.html      # 博客编辑器(管理员使用)
 ├── blog-editor.css       # 博客编辑器样式
 ├── blog-editor.js        # 博客编辑器脚本
-├── generate-archives.js  # 生成归档页面的脚本
-├── generate-index.js     # 生成博客首页的脚本
 ├── generate-posts.js     # 将Markdown转换为HTML的脚本
 ├── generate-rss.js       # 生成RSS Feed的脚本
 ├── generate-sitemap.js   # 生成站点地图的脚本
-├── generate-tags.js      # 生成标签页面的脚本
-├── index.html            # 博客首页 (自动生成)
+├── index.html            # 博客首页 (用户调用github api在用户机器上自动生成内容)
 ├── package.json          # 项目配置
 ├── README.md             # 项目说明
 ├── robots.txt            # 搜索引擎爬虫指南
 ├── rss.xml               # RSS Feed文件 (自动生成)
 ├── sitemap.xml           # 站点地图 (自动生成)
 ├── styles.css            # 全局样式
-├── tags.html             # 标签页面 (自动生成)
+├── tags.html             # 标签页面 (用户调用github api在用户机器上自动生成内容)
 └── template.html         # 博客文章模板
 ```
 
