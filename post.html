@@ -13,11 +13,22 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="alternate" type="application/rss+xml" title="Tianjinsa的博客 RSS Feed" href="./rss.xml">
-    
-    <!-- 加载配置和工具 -->
+      <!-- 加载配置和工具 -->
     <script src="./js/config.js"></script>
     <script src="./js/github-api.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // 配置marked.js
+        document.addEventListener('DOMContentLoaded', function() {
+            marked.setOptions({
+                gfm: true, // 启用 GitHub 风格的 Markdown
+                breaks: true, // 允许回车换行
+                headerIds: true, // 为标题添加 id 属性
+                mangle: false, // 不对邮箱地址进行编码
+                smartypants: false // 不进行标点符号的智能替换
+            });
+        });
+    </script>
 </head>
 <body>
     <nav class="navbar">
@@ -94,10 +105,16 @@
                     config.GITHUB_REPO_OWNER,
                     config.GITHUB_REPO_NAME
                 );
-                
-                // 获取文章内容
+                  // 获取文章内容
                 const filePath = `${config.BLOG_PATH}/${filename}`;
                 const content = await github.getFileContent(filePath, config.DEFAULT_BRANCH);
+                
+                // 添加调试信息
+                console.log('文章内容编码情况:', {
+                    contentLength: content.length,
+                    firstFewChars: content.substring(0, 100),
+                    hasChinese: /[\u4e00-\u9fa5]/.test(content)
+                });
                 
                 // 解析front matter
                 const { data, content: markdownContent } = parseFrontMatter(content);
@@ -137,10 +154,17 @@
                 const tags = data.tags || [];
                 const tagsHTML = tags.length > 0 
                     ? tags.map(tag => `<span class="tag"><i class="bi bi-tag"></i> ${tag}</span>`).join(' ')
-                    : '';
+                    : '';                // 转换Markdown为HTML
+                // 确保内容是有效的 UTF-8 字符串
+                const cleanedMarkdownContent = markdownContent.trim();
+                const htmlContent = marked.parse(cleanedMarkdownContent);
                 
-                // 转换Markdown为HTML
-                const htmlContent = marked.parse(markdownContent);
+                // 添加调试信息
+                console.log('转换后的HTML内容:', {
+                    htmlLength: htmlContent.length,
+                    hasChineseInHtml: /[\u4e00-\u9fa5]/.test(htmlContent),
+                    sampleHtml: htmlContent.substring(0, 100)
+                });
                 
                 // 更新页面内容
                 document.getElementById('article-container').innerHTML = `
@@ -181,8 +205,7 @@
                 </div>
             `;
         }
-        
-        /**
+          /**
          * 简单的Front Matter解析器
          * @param {string} content Markdown内容
          * @returns {Object} 包含data和content的对象
@@ -192,6 +215,12 @@
                 data: {},
                 content: content
             };
+            
+            // 确保内容是字符串
+            if (typeof content !== 'string') {
+                console.error('Front Matter 解析错误: 内容不是字符串', content);
+                return result;
+            }
             
             // 检查是否有Front Matter
             if (!content.startsWith('---')) {
@@ -214,6 +243,12 @@
                     const key = line.substring(0, colonIndex).trim();
                     let value = line.substring(colonIndex + 1).trim();
                     
+                    // 去除值两端的引号
+                    if ((value.startsWith('"') && value.endsWith('"')) || 
+                        (value.startsWith("'") && value.endsWith("'"))) {
+                        value = value.substring(1, value.length - 1);
+                    }
+                    
                     // 处理数组
                     if (value.startsWith('[') && value.endsWith(']')) {
                         try {
@@ -222,7 +257,15 @@
                             // 如果JSON解析失败，尝试简单的数组解析
                             value = value.substring(1, value.length - 1)
                                 .split(',')
-                                .map(item => item.trim());
+                                .map(item => {
+                                    const trimmed = item.trim();
+                                    // 去除数组元素的引号
+                                    if ((trimmed.startsWith('"') && trimmed.endsWith('"')) || 
+                                        (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
+                                        return trimmed.substring(1, trimmed.length - 1);
+                                    }
+                                    return trimmed;
+                                });
                         }
                     }
                     

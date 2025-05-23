@@ -191,7 +191,8 @@ async function publishBlog() {
         const date = new Date();
         const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}-${String(date.getHours()).padStart(2, '0')}-${String(date.getMinutes()).padStart(2, '0')}-${String(date.getSeconds()).padStart(2, '0')}`;
         // 移除非法字符，并将空格替换为连字符
-        const safeTitle = title.replace(/[\\/:*?"<>|\s]/g, '_').toLowerCase();
+        safeTitle = title.replace(/[\\/:*?"<>|\s]/g, '_').toLowerCase();
+        safeTitle = safeTitle.replace('+', 'p');
         const fileName = `${dateString}-${safeTitle}.md`;
 
         // 创建Markdown文件内容，包含元信息 (Front Matter)

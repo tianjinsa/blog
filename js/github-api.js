@@ -59,9 +59,7 @@ class GitHubAPI {
             console.error('GitHub API 请求出错:', error);
             throw error;
         }
-    }
-
-    /**
+    }    /**
      * 获取仓库内容
      * @param {string} path - 仓库内路径
      * @param {string} ref - 分支或提交引用
@@ -70,7 +68,7 @@ class GitHubAPI {
     async getRepoContents(path = '', ref = 'main') {
         return this.request(`/repos/${this.owner}/${this.repo}/contents/${path}?ref=${ref}`);
     }
-
+    
     /**
      * 获取指定文件内容
      * @param {string} path - 文件路径
@@ -85,7 +83,24 @@ class GitHubAPI {
         }
         
         // GitHub API 返回Base64编码的内容
-        return atob(data.content);
+        // 使用 decodeURIComponent 和 escape 来正确处理 UTF-8 编码的内容
+        try {
+            // 移除可能的换行符，然后解码
+            const base64 = data.content.replace(/\s/g, '');
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            
+            // 转换为字节数组
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            
+            // 使用 TextDecoder 正确解码 UTF-8
+            return new TextDecoder('utf-8').decode(bytes);
+        } catch (error) {
+            console.error('解码文件内容出错:', error);
+            throw new Error('解码文件内容时出错: ' + error.message);
+        }
     }
 
     /**
