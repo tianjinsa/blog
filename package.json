@@ -2,11 +2,11 @@
   "name": "tianjinsa-blog",
   "version": "1.0.0",
   "description": "Tianjinsa的个人博客",
-  "main": "generate-posts.js",
+  "main": "local-generate.js",
   "scripts": {
-    "build": "node generate-posts.js && node generate-sitemap.js && node generate-rss.js",
+    "build": "node local-generate.js",
     "dev": "http-server -p 8080 -c-1",
-    "sitemap": "node generate-sitemap.js"
+    "rss": "node generate-rss.js"
   },
   "keywords": [
     "blog",

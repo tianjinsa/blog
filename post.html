@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tianjinsa的博客文章">
+    <meta name="keywords" content="Tianjinsa, 博客, 技术分享">
+    <meta name="author" content="Tianjinsa">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+    <title>正在加载... - Tianjinsa的博客</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="alternate" type="application/rss+xml" title="Tianjinsa的博客 RSS Feed" href="./rss.xml">
+    
+    <!-- 加载配置和工具 -->
+    <script src="./js/config.js"></script>
+    <script src="./js/github-api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="./index.html" class="navbar-brand">Tianjinsa</a>
+        <ul class="navbar-links">
+            <li><a href="./index.html"><i class="bi bi-house"></i> 首页</a></li>
+            <li><a href="./archives.html"><i class="bi bi-archive"></i> 归档</a></li>
+            <li><a href="./tags.html"><i class="bi bi-tags"></i> 标签</a></li>
+            <li><a href="./about.html"><i class="bi bi-person"></i> 关于</a></li>
+        </ul>
+        <div class="navbar-toggle" id="navbar-toggle">
+            <i class="bi bi-list"></i>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <div id="article-container">
+                <div class="loading">
+                    <p>正在加载文章内容...</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p>&copy; <span id="current-year"></span> Tianjinsa. 保留所有权利。</p>
+            <p>使用 <a href="https://pages.github.com/" target="_blank">GitHub Pages</a> 构建</p>
+        </footer>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        // 设置当前年份
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // 移动端导航栏切换
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarToggleEl = document.getElementById('navbar-toggle');
+            const navbarLinksEl = document.querySelector('.navbar-links');
+            if (navbarToggleEl && navbarLinksEl) {
+                navbarToggleEl.addEventListener('click', function() {
+                    navbarLinksEl.classList.toggle('active');
+                });
+            }
+            
+            // 加载文章内容
+            loadArticle();
+        });
+        
+        /**
+         * 从URL参数获取文章文件名并加载内容
+         */
+        async function loadArticle() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const filename = urlParams.get('file');
+                
+                if (!filename) {
+                    showError('未指定文章文件名');
+                    return;
+                }
+                
+                const config = window.BLOG_CONFIG || {
+                    GITHUB_REPO_OWNER: 'tianjinsa',
+                    GITHUB_REPO_NAME: 'blog',
+                    BLOG_PATH: '_posts',
+                    DEFAULT_BRANCH: 'main'
+                };
+                
+                // 创建GitHub API客户端
+                const github = new GitHubAPI(
+                    config.GITHUB_REPO_OWNER,
+                    config.GITHUB_REPO_NAME
+                );
+                
+                // 获取文章内容
+                const filePath = `${config.BLOG_PATH}/${filename}`;
+                const content = await github.getFileContent(filePath, config.DEFAULT_BRANCH);
+                
+                // 解析front matter
+                const { data, content: markdownContent } = parseFrontMatter(content);
+                
+                // 处理标题
+                const title = data.title || filename.replace(/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-/, '').replace('.md', '');
+                document.title = `${title} - Tianjinsa的博客`;
+                
+                // 处理日期
+                let date = filename.substring(0, 19); // 从文件名获取日期
+                let displayDate = date;
+                
+                if (data.date) {
+                    const dateObj = new Date(data.date);
+                    if (!isNaN(dateObj.getTime())) {
+                        displayDate = dateObj.toLocaleDateString('zh-CN', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                    }
+                } else {
+                    const dateMatch = filename.match(/^(\d{4}-\d{2}-\d{2})-/);
+                    if (dateMatch) {
+                        const dateObj = new Date(dateMatch[1]);
+                        if (!isNaN(dateObj.getTime())) {
+                            displayDate = dateObj.toLocaleDateString('zh-CN', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                        }
+                    }
+                }
+                
+                // 处理标签
+                const tags = data.tags || [];
+                const tagsHTML = tags.length > 0 
+                    ? tags.map(tag => `<span class="tag"><i class="bi bi-tag"></i> ${tag}</span>`).join(' ')
+                    : '';
+                
+                // 转换Markdown为HTML
+                const htmlContent = marked.parse(markdownContent);
+                
+                // 更新页面内容
+                document.getElementById('article-container').innerHTML = `
+                    <article class="blog-post">
+                        <header class="blog-post-header">
+                            <h1 class="blog-post-title">${title}</h1>
+                            <div class="blog-post-meta">
+                                <span><i class="bi bi-calendar"></i> ${displayDate}</span>
+                                <div class="blog-tags">${tagsHTML}</div>
+                            </div>
+                        </header>
+                        <div class="blog-post-content">
+                            ${htmlContent}
+                        </div>
+                    </article>
+                `;
+                
+                // 高亮代码
+                if (window.Prism) {
+                    Prism.highlightAll();
+                }
+                
+            } catch (error) {
+                console.error('加载文章出错:', error);
+                showError('加载文章时出错: ' + error.message);
+            }
+        }
+        
+        /**
+         * 显示错误消息
+         * @param {string} message 错误消息
+         */
+        function showError(message) {
+            document.getElementById('article-container').innerHTML = `
+                <div class="error">
+                    <p>${message}</p>
+                    <p><a href="./index.html">返回首页</a></p>
+                </div>
+            `;
+        }
+        
+        /**
+         * 简单的Front Matter解析器
+         * @param {string} content Markdown内容
+         * @returns {Object} 包含data和content的对象
+         */
+        function parseFrontMatter(content) {
+            const result = {
+                data: {},
+                content: content
+            };
+            
+            // 检查是否有Front Matter
+            if (!content.startsWith('---')) {
+                return result;
+            }
+            
+            // 查找第二个---标记
+            const endIndex = content.indexOf('---', 3);
+            if (endIndex === -1) {
+                return result;
+            }
+            
+            // 提取Front Matter部分
+            const frontMatter = content.substring(3, endIndex).trim();
+            
+            // 解析每一行
+            frontMatter.split('\n').forEach(line => {
+                const colonIndex = line.indexOf(':');
+                if (colonIndex !== -1) {
+                    const key = line.substring(0, colonIndex).trim();
+                    let value = line.substring(colonIndex + 1).trim();
+                    
+                    // 处理数组
+                    if (value.startsWith('[') && value.endsWith(']')) {
+                        try {
+                            value = JSON.parse(value);
+                        } catch (e) {
+                            // 如果JSON解析失败，尝试简单的数组解析
+                            value = value.substring(1, value.length - 1)
+                                .split(',')
+                                .map(item => item.trim());
+                        }
+                    }
+                    
+                    result.data[key] = value;
+                }
+            });
+            
+            // 提取实际内容
+            result.content = content.substring(endIndex + 3).trim();
+            
+            return result;
+        }
+    </script>
+</body>
+</html>
