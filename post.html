@@ -99,22 +99,19 @@
                     BLOG_PATH: '_posts',
                     DEFAULT_BRANCH: 'main'
                 };
-                
-                // 创建GitHub API客户端
-                const github = new GitHubAPI(
-                    config.GITHUB_REPO_OWNER,
-                    config.GITHUB_REPO_NAME
-                );
                   // 获取文章内容
                 const filePath = `${config.BLOG_PATH}/${filename}`;
-                const content = await github.getFileContent(filePath, config.DEFAULT_BRANCH);
                 
-                // 添加调试信息
-                console.log('文章内容编码情况:', {
-                    contentLength: content.length,
-                    firstFewChars: content.substring(0, 100),
-                    hasChinese: /[\u4e00-\u9fa5]/.test(content)
-                });
+                // 直接从GitHub Raw内容获取原始文件内容，避免Base64解码问题
+                const fileUrl = `https://raw.githubusercontent.com/${config.GITHUB_REPO_OWNER}/${config.GITHUB_REPO_NAME}/${config.DEFAULT_BRANCH}/${filePath}`;
+                const response = await fetch(fileUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`获取文章失败: ${response.status}`);
+                }
+                
+                const content = await response.text();
+                  // 文章内容已获取完成
                 
                 // 解析front matter
                 const { data, content: markdownContent } = parseFrontMatter(content);
@@ -155,16 +152,7 @@
                 const tagsHTML = tags.length > 0 
                     ? tags.map(tag => `<span class="tag"><i class="bi bi-tag"></i> ${tag}</span>`).join(' ')
                     : '';                // 转换Markdown为HTML
-                // 确保内容是有效的 UTF-8 字符串
-                const cleanedMarkdownContent = markdownContent.trim();
-                const htmlContent = marked.parse(cleanedMarkdownContent);
-                
-                // 添加调试信息
-                console.log('转换后的HTML内容:', {
-                    htmlLength: htmlContent.length,
-                    hasChineseInHtml: /[\u4e00-\u9fa5]/.test(htmlContent),
-                    sampleHtml: htmlContent.substring(0, 100)
-                });
+                const htmlContent = marked.parse(markdownContent.trim());
                 
                 // 更新页面内容
                 document.getElementById('article-container').innerHTML = `
