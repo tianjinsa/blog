@@ -2,8 +2,9 @@
  * 时间线风格滚动条 - 移动端优化
  * 类似手机相册时间线的滚动体验
  */
-
-class TimelineScrollbar {    constructor() {
+const withpx = 1920;
+class TimelineScrollbar {
+    constructor() {
         this.container = null;
         this.track = null;
         this.progress = null;
@@ -12,7 +13,7 @@ class TimelineScrollbar {    constructor() {
         this.isDragging = false;
         this.sections = [];
         this.currentSection = 0;
-        this.autoHide = null;
+        this.autoHide = new TimelineAutoHide(this);
         
         // 节流函数
         this.throttle = (func, limit) => {
@@ -30,10 +31,9 @@ class TimelineScrollbar {    constructor() {
         
         this.init();
     }    init() {
-        // 临时：为了测试，允许在所有屏幕尺寸下显示
-        // 正式版本应该改回 window.innerWidth > 768
-        if (false && window.innerWidth > 768) {
-            console.log('时间线滚动条: 屏幕宽度大于768px，跳过初始化');
+        // 仅在桌面端（屏幕宽度大于withpxpx）跳过初始化
+        if (window.innerWidth > withpx) {
+            console.log('时间线滚动条: 屏幕宽度大于withpxpx，跳过初始化');
             return;
         }
         
@@ -43,12 +43,9 @@ class TimelineScrollbar {    constructor() {
         this.bindEvents();
         this.updateSections();
         
-        // 延迟显示，确保内容加载完成
-        setTimeout(() => {
-            this.updateScrollbar();
-            this.showScrollbar();
-            console.log('时间线滚动条: 初始化完成');
-        }, 500);
+        this.updateScrollbar();
+        this.showScrollbar();
+        console.log('时间线滚动条: 初始化完成');
     }
     
     createScrollbar() {
@@ -176,7 +173,7 @@ class TimelineScrollbar {    constructor() {
         
         // 窗口大小变化
         window.addEventListener('resize', this.throttle(() => {
-            if (window.innerWidth > 768) {
+            if (window.innerWidth > withpx) {
                 this.hideScrollbar();
             } else {
                 this.showScrollbar();
@@ -282,7 +279,7 @@ class TimelineScrollbar {    constructor() {
     }
     
     updateScrollbar() {
-        if (!this.container || window.innerWidth > 768) return;
+        if (!this.container || window.innerWidth > withpx) return;
         
         const scrollTop = window.pageYOffset;
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -325,27 +322,14 @@ class TimelineScrollbar {    constructor() {
     }
     
     showScrollbar() {
-        if (this.container && window.innerWidth <= 768) {
+        if (this.container && window.innerWidth <= withpx) {
             this.container.classList.add('active');
         }
     }
     
     hideScrollbar() {
-        if (this.container) {
+        if (this.container && window.innerWidth > withpx) {
             this.container.classList.remove('active');
-        }
-    }
-    
-    // 公共方法：手动刷新
-    refresh() {
-        this.updateSections();
-        this.updateScrollbar();
-    }
-    
-    // 公共方法：销毁
-    destroy() {
-        if (this.container) {
-            this.container.remove();
         }
     }
 }
@@ -403,31 +387,22 @@ class TimelineAutoHide {
 
 // 初始化时间线滚动条
 let timelineScrollbar = null;
-let timelineAutoHide = null;
 
 // 初始化函数
 function initTimelineScrollbar() {
-    // 临时：为了测试，允许在所有屏幕尺寸下显示
-    // 正式版本应该改回 window.innerWidth <= 768
-    if (true || window.innerWidth <= 768) {
+    // 仅在移动端（屏幕宽度小于等于withpxpx）初始化
+    if (window.innerWidth <= withpx) {
         console.log('时间线滚动条: 开始初始化');
         timelineScrollbar = new TimelineScrollbar();
-        timelineAutoHide = new TimelineAutoHide(timelineScrollbar);
-        
-        // 将自动隐藏实例绑定到滚动条
-        timelineScrollbar.autoHide = timelineAutoHide;
     }
 }
 
 // 在DOM加载完成后初始化
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        // 延迟初始化，确保文章内容已加载
-        setTimeout(initTimelineScrollbar, 1000);
-    });
+    document.addEventListener('DOMContentLoaded', initTimelineScrollbar);
 } else {
     // DOM已经加载完成
-    setTimeout(initTimelineScrollbar, 1000);
+    initTimelineScrollbar();
 }
 
 // 导出到全局作用域

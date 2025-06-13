@@ -230,11 +230,11 @@
                 // 处理大纲折叠/展开
                 setupOutlineToggle();
                 
-                // 初始化时间线滚动条（移动端）
+                // 初始化时间线滚动条
                 setTimeout(() => {
-                    if (window.initTimelineScrollbar) {
+                    // if (1||window.initTimelineScrollbar) {
                         window.initTimelineScrollbar();
-                    }
+                    // }
                 }, 500);
                 
             } catch (error) {
