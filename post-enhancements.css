@@ -199,6 +199,17 @@
     .article-outline {
         width: calc(100% - 40px);
         left: 20px;
+        /* 在移动端降低大纲的z-index，避免与时间线滚动条冲突 */
+        z-index: 90;
+    }
+    
+    /* 为时间线滚动条预留空间 */
+    .blog-post {
+        padding-right: 50px;
+    }
+    
+    .blog-post-content {
+        padding-right: 10px;
     }
 }
 

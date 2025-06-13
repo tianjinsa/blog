@@ -6,9 +6,9 @@
     <meta name="description" content="Tianjinsa的博客文章">
     <meta name="keywords" content="Tianjinsa, 博客, 技术分享">    <meta name="author" content="Tianjinsa">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
-    <title>正在加载... - Tianjinsa的博客</title>
-    <link rel="stylesheet" href="./styles.css">
+    <title>正在加载... - Tianjinsa的博客</title>    <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet" href="./post-enhancements.css">
+    <link rel="stylesheet" href="./timeline-scrollbar.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -88,10 +88,10 @@
             <p>&copy; <span id="current-year"></span> Tianjinsa. 保留所有权利。</p>
             <p>使用 <a href="https://pages.github.com/" target="_blank">GitHub Pages</a> 构建</p>
         </footer>
-    </div>
-    
+    </div>    
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="./timeline-scrollbar.js"></script>
     <script>
         // 设置当前年份
         document.getElementById('current-year').textContent = new Date().getFullYear();
@@ -224,13 +224,18 @@
                 }
                 
                 // 添加代码块复制按钮
-                addCodeBlockCopyButtons();
-                
-                // 生成文章大纲
+                addCodeBlockCopyButtons();                // 生成文章大纲
                 generateArticleOutline();
                 
                 // 处理大纲折叠/展开
                 setupOutlineToggle();
+                
+                // 初始化时间线滚动条（移动端）
+                setTimeout(() => {
+                    if (window.initTimelineScrollbar) {
+                        window.initTimelineScrollbar();
+                    }
+                }, 500);
                 
             } catch (error) {
                 console.error('加载文章出错:', error);

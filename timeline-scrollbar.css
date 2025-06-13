@@ -1,0 +1,324 @@
+/* 时间线风格滚动条 - 专为移动端设计 */
+
+/* 时间线滚动条容器 */
+.timeline-scrollbar {
+    position: fixed;
+    right: 8px;
+    top: calc(var(--header-height) + 10px);
+    bottom: 20px;
+    width: 40px;
+    z-index: 999;
+    display: none; /* 默认隐藏 */
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+/* 显示状态 */
+.timeline-scrollbar.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.timeline-scrollbar.visible {
+    opacity: 0.9;
+}
+
+.timeline-scrollbar:hover,
+.timeline-scrollbar.visible:hover {
+    opacity: 1;
+}
+
+/* 时间线轨道 */
+.timeline-track {
+    position: relative;
+    width: 3px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    margin: 0 auto;
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+/* 时间线进度条 */
+.timeline-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(180deg, 
+        var(--accent-color) 0%, 
+        #4a90e2 50%, 
+        #357abd 100%);
+    border-radius: 2px;
+    height: 0%;
+    transition: height 0.1s ease;
+    box-shadow: 0 0 4px rgba(135, 206, 235, 0.5);
+}
+
+/* 时间线拖拽滑块 */
+.timeline-thumb {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 22px;
+    height: 22px;
+    background: radial-gradient(circle, var(--accent-color) 0%, #4a90e2 100%);
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(135, 206, 235, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    pointer-events: auto;
+}
+
+.timeline-thumb:active {
+    transform: translateX(-50%) translateY(-50%) scale(1.3);    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.4),
+        0 0 0 2px rgba(135, 206, 235, 0.6);
+    border-color: white;
+}
+
+/* 触摸状态 */
+.timeline-thumb.touching,
+.timeline-marker.touching {
+    transform: translateX(-50%) translateY(-50%) scale(1.4);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.5),
+        0 0 0 3px rgba(135, 206, 235, 0.8);
+}
+
+/* 时间线标记点 */
+.timeline-markers {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    border: 2px solid rgba(135, 206, 235, 0.8);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.timeline-marker:hover {
+    background: var(--accent-color);
+    transform: translateX(-50%) scale(1.4);
+    border-color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.timeline-marker.active {
+    background: var(--accent-color);
+    border-color: white;
+    box-shadow: 
+        0 0 8px rgba(135, 206, 235, 0.8),
+        0 2px 6px rgba(0, 0, 0, 0.4);
+    transform: translateX(-50%) scale(1.2);
+}
+
+/* 为重要标题添加特殊样式 */
+.timeline-marker.level-1 {
+    width: 12px;
+    height: 12px;
+    border-width: 3px;
+}
+
+.timeline-marker.level-2 {
+    width: 10px;
+    height: 10px;
+    border-width: 2px;
+}
+
+.timeline-marker.level-3 {
+    width: 8px;
+    height: 8px;
+    border-width: 1px;
+}
+
+/* 时间线标签 */
+.timeline-label {
+    position: absolute;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timeline-label::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -6px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-left-color: rgba(0, 0, 0, 0.85);
+}
+
+.timeline-marker:hover .timeline-label {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-5px);
+}
+
+/* 为不同级别的标题使用不同颜色的标签 */
+.timeline-marker.level-1 .timeline-label {
+    background: rgba(135, 206, 235, 0.9);
+    border-color: rgba(135, 206, 235, 0.3);
+}
+
+.timeline-marker.level-1 .timeline-label::before {
+    border-left-color: rgba(135, 206, 235, 0.9);
+}
+
+.timeline-marker.level-2 .timeline-label {
+    background: rgba(74, 144, 226, 0.9);
+    border-color: rgba(74, 144, 226, 0.3);
+}
+
+.timeline-marker.level-2 .timeline-label::before {
+    border-left-color: rgba(74, 144, 226, 0.9);
+}
+
+/* 时间线头部和尾部装饰 */
+.timeline-track::before,
+.timeline-track::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--accent-color);
+    border-radius: 50%;
+}
+
+.timeline-track::before {
+    top: -3px;
+}
+
+.timeline-track::after {
+    bottom: -3px;
+}
+
+/* 移动端显示 - 临时改为所有屏幕尺寸都显示，便于测试 */
+@media (max-width: 99999px) {
+    .timeline-scrollbar {
+        display: block;
+    }
+    
+    .timeline-scrollbar.active {
+        opacity: 1;
+    }
+    
+    /* 触摸优化 */
+    .timeline-thumb {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .timeline-marker {
+        width: 10px;
+        height: 10px;
+    }
+    
+    /* 增加触摸区域 */
+    .timeline-thumb::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        background: transparent;
+    }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+    .timeline-scrollbar {
+        right: 4px;
+        width: 36px;
+    }
+    
+    .timeline-track {
+        width: 2px;
+    }
+    
+    .timeline-thumb {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .timeline-marker {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* 文章内容区域为时间线留空间 */
+@media (max-width: 768px) {
+    .blog-post {
+        padding-right: 50px;
+    }
+}
+
+/* 动画效果 */
+@keyframes timeline-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(135, 206, 235, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(135, 206, 235, 0);
+    }
+}
+
+.timeline-thumb.dragging {
+    animation: timeline-pulse 1s infinite;
+}
+
+/* 隐藏原生滚动条在移动端 */
+@media (max-width: 768px) {
+    html {
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+    
+    html::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+}
